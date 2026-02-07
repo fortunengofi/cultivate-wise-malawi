@@ -4,6 +4,8 @@ import { Leaf, MapPin, Loader2, Sprout, Droplets, ThermometerSun, Mountain } fro
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PageHeader from "@/components/PageHeader";
+import SoilPhotoUpload from "@/components/SoilPhotoUpload";
+import { useSoilAnalysis } from "@/hooks/useSoilAnalysis";
 
 const soilTypes = [
   { value: "red-laterite", label: "Red Laterite", desc: "Common in central Malawi, iron-rich" },
@@ -26,58 +28,20 @@ const seasons = [
   { value: "hot-dry", label: "Hot Dry Season (Aug-Oct)" },
 ];
 
-interface CropRecommendation {
-  crop: string;
-  confidence: string;
-  reason: string;
-  tips: string;
-  emoji: string;
-}
-
-const getRecommendations = (soil: string, moisture: string, season: string): CropRecommendation[] => {
-  const recs: Record<string, CropRecommendation[]> = {
-    "red-laterite": [
-      { crop: "Maize (Chimanga)", confidence: "High", reason: "Red laterite provides good drainage for maize roots", tips: "Add compost before planting. Space rows 75cm apart.", emoji: "🌽" },
-      { crop: "Groundnuts (Mtedza)", confidence: "High", reason: "Well-suited for legumes, helps fix nitrogen", tips: "Plant after first good rains. Harvest when leaves yellow.", emoji: "🥜" },
-      { crop: "Tobacco (Fodya)", confidence: "Medium", reason: "Grows well but needs careful management", tips: "Requires nursery beds first. Transplant at 6 weeks.", emoji: "🍂" },
-    ],
-    "sandy-loam": [
-      { crop: "Sweet Potatoes (Mbatata)", confidence: "High", reason: "Sandy loam provides perfect loose structure", tips: "Plant vine cuttings at start of rains. Mound soil around stems.", emoji: "🍠" },
-      { crop: "Cassava (Chinangwa)", confidence: "High", reason: "Tolerates sandy conditions well", tips: "Plant stem cuttings 1m apart. Harvest after 12-18 months.", emoji: "🌿" },
-      { crop: "Sorghum (Mapira)", confidence: "Medium", reason: "Drought-resistant, good for lighter soils", tips: "Direct seed after first rains. Thin to 20cm spacing.", emoji: "🌾" },
-    ],
-    "clay": [
-      { crop: "Rice (Mpunga)", confidence: "High", reason: "Clay retains water perfectly for paddy rice", tips: "Prepare nursery beds. Transplant seedlings at 3-4 weeks.", emoji: "🍚" },
-      { crop: "Beans (Nyemba)", confidence: "Medium", reason: "Grows well with clay's moisture retention", tips: "Plant in rows 45cm apart. Provide support for climbing varieties.", emoji: "🫘" },
-      { crop: "Sugarcane (Mzimbe)", confidence: "Medium", reason: "Benefits from clay's water-holding capacity", tips: "Plant setts horizontally. Keep weed-free for first 3 months.", emoji: "🎋" },
-    ],
-    "alluvial": [
-      { crop: "Vegetables (Masamba)", confidence: "High", reason: "Extremely fertile soil, ideal for vegetables", tips: "Start with tomatoes, onions, and leafy greens. Irrigate regularly.", emoji: "🥬" },
-      { crop: "Maize (Chimanga)", confidence: "High", reason: "Rich nutrients support excellent maize yields", tips: "Can achieve 2 harvests per year with irrigation.", emoji: "🌽" },
-      { crop: "Banana (Nthochi)", confidence: "High", reason: "Deep, fertile soil perfect for banana roots", tips: "Space plants 3m apart. Mulch heavily around base.", emoji: "🍌" },
-    ],
-    "volcanic": [
-      { crop: "Coffee", confidence: "High", reason: "Volcanic soil is ideal for coffee cultivation", tips: "Plant in shaded areas. Takes 3-4 years to first harvest.", emoji: "☕" },
-      { crop: "Tea (Tiyi)", confidence: "High", reason: "Acidic volcanic soil perfect for tea bushes", tips: "Plant on slopes for drainage. Prune regularly.", emoji: "🍵" },
-      { crop: "Macadamia Nuts", confidence: "Medium", reason: "Rich minerals support nut tree growth", tips: "Long-term investment. First harvest after 5-7 years.", emoji: "🌰" },
-    ],
-    "black-cotton": [
-      { crop: "Cotton (Thonje)", confidence: "High", reason: "Named after this soil type — ideal conditions", tips: "Plant at start of rains. Monitor for bollworm.", emoji: "🏵️" },
-      { crop: "Wheat (Tirigu)", confidence: "Medium", reason: "Deep soil supports wheat root systems", tips: "Best in cool dry season with irrigation.", emoji: "🌾" },
-      { crop: "Sunflower", confidence: "Medium", reason: "Deep roots access nutrients in this soil", tips: "Space 60cm apart. Good cash crop for oil production.", emoji: "🌻" },
-    ],
-  };
-
-  return recs[soil] || recs["red-laterite"];
-};
-
 const SoilAnalyzer = () => {
   const [soilType, setSoilType] = useState("");
   const [moisture, setMoisture] = useState("");
   const [season, setSeason] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [results, setResults] = useState<CropRecommendation[] | null>(null);
   const [locationStatus, setLocationStatus] = useState<"idle" | "requesting" | "granted" | "denied">("idle");
+
+  const {
+    isDetecting,
+    isAnalyzing,
+    soilDetection,
+    recommendations,
+    detectSoilFromPhoto,
+    getRecommendations,
+  } = useSoilAnalysis();
 
   const requestLocation = () => {
     setLocationStatus("requesting");
@@ -91,14 +55,17 @@ const SoilAnalyzer = () => {
     }
   };
 
-  const handleAnalyze = () => {
+  const handlePhotoUpload = async (base64: string) => {
+    const result = await detectSoilFromPhoto(base64);
+    if (result?.detected_soil_type) {
+      setSoilType(result.detected_soil_type);
+    }
+  };
+
+  const handleAnalyze = async () => {
     if (!soilType || !moisture || !season) return;
-    setIsAnalyzing(true);
-    setResults(null);
-    setTimeout(() => {
-      setResults(getRecommendations(soilType, moisture, season));
-      setIsAnalyzing(false);
-    }, 2000);
+    const soilLabel = soilTypes.find(s => s.value === soilType)?.label || soilType;
+    await getRecommendations(soilLabel, moisture, season);
   };
 
   return (
@@ -134,6 +101,21 @@ const SoilAnalyzer = () => {
             <span className="text-xs text-primary font-semibold">📍 Location enabled — using local weather data</span>
           </motion.div>
         )}
+
+        {/* AI Photo Upload */}
+        <SoilPhotoUpload
+          onDetected={() => {}}
+          isDetecting={isDetecting}
+          onUpload={handlePhotoUpload}
+          soilDetection={soilDetection}
+        />
+
+        {/* Divider */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-xs text-muted-foreground font-semibold">OR SELECT MANUALLY</span>
+          <div className="flex-1 h-px bg-border" />
+        </div>
 
         {/* Soil Type Selection */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -204,12 +186,12 @@ const SoilAnalyzer = () => {
             {isAnalyzing ? (
               <>
                 <Loader2 size={20} className="animate-spin mr-2" />
-                Analyzing Soil...
+                AI Analyzing Soil...
               </>
             ) : (
               <>
                 <Sprout size={20} className="mr-2" />
-                Get Crop Recommendations
+                Get AI Crop Recommendations
               </>
             )}
           </Button>
@@ -217,7 +199,7 @@ const SoilAnalyzer = () => {
 
         {/* Results */}
         <AnimatePresence>
-          {results && (
+          {recommendations && recommendations.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -226,9 +208,9 @@ const SoilAnalyzer = () => {
             >
               <h3 className="text-lg font-bold text-foreground font-serif flex items-center gap-2">
                 <Leaf size={18} className="text-primary" />
-                Recommended Crops
+                AI Recommended Crops
               </h3>
-              {results.map((rec, idx) => (
+              {recommendations.map((rec, idx) => (
                 <motion.div
                   key={rec.crop}
                   initial={{ opacity: 0, x: -20 }}
