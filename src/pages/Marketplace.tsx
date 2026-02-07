@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Phone, MessageCircle, Plus, Filter } from "lucide-react";
+import { Search, MapPin, Phone, MessageCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,14 +48,14 @@ const Marketplace = () => {
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-6xl mx-auto">
       <PageHeader
         title="Farmer's Market"
         subtitle="Buy and sell produce directly"
         image={marketplaceHero}
       />
 
-      <div className="px-4 -mt-4 relative z-10 space-y-4">
+      <div className="px-4 sm:px-0 -mt-4 relative z-10 space-y-4">
         {/* Search & Filter */}
         <div className="bg-card rounded-xl p-3 shadow-card border border-border space-y-2">
           <div className="relative">
@@ -118,49 +118,51 @@ const Marketplace = () => {
         </Dialog>
 
         {/* Listings */}
-        <div className="space-y-3 pb-6">
-          <p className="text-xs text-muted-foreground font-semibold">{filteredListings.length} listings available</p>
-          {filteredListings.map((listing, index) => (
-            <motion.div
-              key={listing.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.06 }}
-              className="bg-card rounded-xl p-4 shadow-card border border-border"
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-3xl">{listing.emoji}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-bold text-foreground text-sm">{listing.product}</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">{listing.quantity} • {listing.category}</p>
+        <div className="pb-8">
+          <p className="text-xs text-muted-foreground font-semibold mb-3">{filteredListings.length} listings available</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filteredListings.map((listing, index) => (
+              <motion.div
+                key={listing.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="bg-card rounded-xl p-4 shadow-card border border-border hover:shadow-elevated transition-shadow"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-3xl">{listing.emoji}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-bold text-foreground text-sm">{listing.product}</h3>
+                        <p className="text-xs text-muted-foreground mt-0.5">{listing.quantity} • {listing.category}</p>
+                      </div>
+                      <span className="text-sm font-bold text-secondary shrink-0">{listing.price}</span>
                     </div>
-                    <span className="text-sm font-bold text-secondary shrink-0">{listing.price}</span>
-                  </div>
 
-                  <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <MapPin size={11} /> {listing.location}
-                    </span>
-                    <span>• {listing.posted}</span>
-                  </div>
+                    <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <MapPin size={11} /> {listing.location}
+                      </span>
+                      <span>• {listing.posted}</span>
+                    </div>
 
-                  <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-border">
-                    <span className="text-xs font-semibold text-foreground">{listing.farmer}</span>
-                    <div className="flex gap-2">
-                      <a href={`tel:${listing.phone}`} className="flex items-center gap-1 text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-                        <Phone size={12} /> Call
-                      </a>
-                      <a href={`sms:${listing.phone}`} className="flex items-center gap-1 text-xs font-semibold text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">
-                        <MessageCircle size={12} /> SMS
-                      </a>
+                    <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-border">
+                      <span className="text-xs font-semibold text-foreground">{listing.farmer}</span>
+                      <div className="flex gap-2">
+                        <a href={`tel:${listing.phone}`} className="flex items-center gap-1 text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                          <Phone size={12} /> Call
+                        </a>
+                        <a href={`sms:${listing.phone}`} className="flex items-center gap-1 text-xs font-semibold text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">
+                          <MessageCircle size={12} /> SMS
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

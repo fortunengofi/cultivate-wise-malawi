@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Building2, Phone, Globe, MapPin, ExternalLink } from "lucide-react";
+import { Phone, Globe, MapPin } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
 const agencies = [
@@ -67,53 +67,54 @@ const agencies = [
 
 const Services = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-6xl mx-auto">
       <PageHeader
         title="Agricultural Services"
         subtitle="Development agencies & support for farmers"
       />
 
-      <div className="px-4 mt-4 space-y-4 pb-6">
+      <div className="px-4 sm:px-0 mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-8">
         {agencies.map((agency, index) => (
           <motion.div
             key={agency.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.08 }}
-            className="bg-card rounded-xl p-4 shadow-card border border-border"
+            transition={{ delay: index * 0.06 }}
+            className="bg-card rounded-xl p-5 shadow-card border border-border hover:shadow-elevated transition-shadow"
           >
             <div className="flex items-start gap-3">
               <span className="text-3xl">{agency.emoji}</span>
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-foreground text-base">{agency.name}</h3>
                 <p className="text-xs text-muted-foreground font-medium">{agency.fullName}</p>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{agency.description}</p>
+              </div>
+            </div>
 
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {agency.services.map((service) => (
-                    <span
-                      key={service}
-                      className="text-xs font-semibold bg-secondary/10 text-secondary px-2 py-0.5 rounded-full"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
+            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{agency.description}</p>
 
-                <div className="mt-3 pt-3 border-t border-border space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Phone size={12} className="text-primary shrink-0" />
-                    <span className="font-semibold">{agency.phone}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Globe size={12} className="text-primary shrink-0" />
-                    <span className="font-semibold">{agency.website}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <MapPin size={12} className="text-primary shrink-0" />
-                    <span className="font-semibold">{agency.location}</span>
-                  </div>
-                </div>
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {agency.services.map((service) => (
+                <span
+                  key={service}
+                  className="text-xs font-semibold bg-secondary/10 text-secondary px-2 py-0.5 rounded-full"
+                >
+                  {service}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-border space-y-1.5">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Phone size={12} className="text-primary shrink-0" />
+                <span className="font-semibold">{agency.phone}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Globe size={12} className="text-primary shrink-0" />
+                <span className="font-semibold">{agency.website}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <MapPin size={12} className="text-primary shrink-0" />
+                <span className="font-semibold">{agency.location}</span>
               </div>
             </div>
           </motion.div>

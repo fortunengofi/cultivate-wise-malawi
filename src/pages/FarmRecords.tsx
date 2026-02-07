@@ -61,26 +61,26 @@ const FarmRecords = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-4xl mx-auto">
       <PageHeader title="Farm Records" subtitle="Track expenses and manage your farm budget" />
 
-      <div className="px-4 -mt-3 relative z-10 space-y-4">
+      <div className="px-4 sm:px-0 mt-6 space-y-4">
         {/* Summary Cards */}
-        <div className="grid grid-cols-3 gap-2">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-xl p-3 shadow-card border border-border text-center">
-            <TrendingUp size={18} className="text-primary mx-auto mb-1" />
+        <div className="grid grid-cols-3 gap-3">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-xl p-4 shadow-card border border-border text-center">
+            <TrendingUp size={20} className="text-primary mx-auto mb-1.5" />
             <p className="text-xs text-muted-foreground font-medium">Income</p>
-            <p className="text-sm font-bold text-primary">{formatMWK(totalIncome)}</p>
+            <p className="text-sm font-bold text-primary mt-0.5">{formatMWK(totalIncome)}</p>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="bg-card rounded-xl p-3 shadow-card border border-border text-center">
-            <TrendingDown size={18} className="text-destructive mx-auto mb-1" />
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="bg-card rounded-xl p-4 shadow-card border border-border text-center">
+            <TrendingDown size={20} className="text-destructive mx-auto mb-1.5" />
             <p className="text-xs text-muted-foreground font-medium">Expenses</p>
-            <p className="text-sm font-bold text-destructive">{formatMWK(totalExpense)}</p>
+            <p className="text-sm font-bold text-destructive mt-0.5">{formatMWK(totalExpense)}</p>
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl p-3 shadow-card border border-border text-center">
-            <Wallet size={18} className={`mx-auto mb-1 ${balance >= 0 ? "text-primary" : "text-destructive"}`} />
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl p-4 shadow-card border border-border text-center">
+            <Wallet size={20} className={`mx-auto mb-1.5 ${balance >= 0 ? "text-primary" : "text-destructive"}`} />
             <p className="text-xs text-muted-foreground font-medium">Balance</p>
-            <p className={`text-sm font-bold ${balance >= 0 ? "text-primary" : "text-destructive"}`}>{formatMWK(balance)}</p>
+            <p className={`text-sm font-bold mt-0.5 ${balance >= 0 ? "text-primary" : "text-destructive"}`}>{formatMWK(balance)}</p>
           </motion.div>
         </div>
 
@@ -157,7 +157,7 @@ const FarmRecords = () => {
         </AnimatePresence>
 
         {/* Records List */}
-        <div className="space-y-2 pb-6">
+        <div className="space-y-2 pb-8">
           <h3 className="text-base font-bold text-foreground font-serif">Recent Records</h3>
           {records.map((record, index) => (
             <motion.div
@@ -165,7 +165,7 @@ const FarmRecords = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-card rounded-xl p-3.5 shadow-soft border border-border flex items-center gap-3"
+              className="bg-card rounded-xl p-4 shadow-soft border border-border flex items-center gap-3"
             >
               <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
                 record.type === "income" ? "bg-primary/10" : "bg-destructive/10"
