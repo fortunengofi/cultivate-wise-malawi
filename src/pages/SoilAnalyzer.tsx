@@ -69,10 +69,10 @@ const SoilAnalyzer = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-3xl mx-auto">
       <PageHeader title="AI Soil Analyzer" subtitle="Get personalized crop recommendations" />
 
-      <div className="px-4 -mt-3 relative z-10 space-y-4">
+      <div className="px-4 sm:px-0 mt-6 space-y-4">
         {/* Location Access */}
         {locationStatus === "idle" && (
           <motion.div
@@ -204,7 +204,7 @@ const SoilAnalyzer = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-3 pb-6"
+              className="space-y-3 pb-8"
             >
               <h3 className="text-lg font-bold text-foreground font-serif flex items-center gap-2">
                 <Leaf size={18} className="text-primary" />

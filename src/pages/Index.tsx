@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, MapPin, Sun, CloudRain } from "lucide-react";
-import heroImage from "@/assets/hero-farm.jpg";
+import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain } from "lucide-react";
+import HeroSlideshow from "@/components/HeroSlideshow";
 
 const quickActions = [
   { to: "/soil", icon: Leaf, label: "Soil AI", description: "Analyze soil & get crop tips", color: "gradient-earth" },
@@ -14,43 +14,21 @@ const quickActions = [
 const weatherInfo = {
   temp: "28°C",
   condition: "Partly Cloudy",
-  location: "Lilongwe, Malawi",
   humidity: "65%",
 };
 
 const Index = () => {
   return (
-    <div className="flex flex-col">
-      {/* Hero Section */}
-      <div className="relative h-64 overflow-hidden">
-        <img src={heroImage} alt="Malawian farmland" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 gradient-hero" />
-        <div className="absolute inset-0 flex flex-col justify-end p-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center gap-1.5 text-primary-foreground/80 text-xs mb-2">
-              <MapPin size={12} />
-              <span className="font-medium">{weatherInfo.location}</span>
-            </div>
-            <h1 className="text-3xl font-bold text-primary-foreground leading-tight">
-              Ulimi Wanzeru
-            </h1>
-            <p className="text-primary-foreground/80 text-sm mt-1 font-medium">
-              Smart Farming for Malawi 🌾
-            </p>
-          </motion.div>
-        </div>
-      </div>
+    <div className="flex flex-col max-w-6xl mx-auto">
+      {/* Hero Slideshow */}
+      <HeroSlideshow />
 
       {/* Weather Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="mx-4 -mt-6 relative z-10"
+        className="mx-4 sm:mx-0 -mt-8 relative z-10"
       >
         <div className="bg-card rounded-xl p-4 shadow-card border border-border">
           <div className="flex items-center justify-between">
@@ -75,19 +53,19 @@ const Index = () => {
       </motion.div>
 
       {/* Quick Actions */}
-      <div className="px-4 mt-6">
-        <h2 className="text-lg font-bold text-foreground mb-3 font-serif">Quick Actions</h2>
-        <div className="grid grid-cols-2 gap-3">
+      <div className="px-4 sm:px-0 mt-8">
+        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">Quick Actions</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {quickActions.map((action, index) => (
             <motion.div
               key={action.to}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + index * 0.08 }}
+              transition={{ delay: 0.3 + index * 0.06 }}
             >
               <Link
                 to={action.to}
-                className="flex flex-col items-start p-4 rounded-xl bg-card border border-border shadow-soft hover:shadow-card transition-all active:scale-[0.98] group"
+                className="flex flex-col items-start p-4 rounded-xl bg-card border border-border shadow-soft hover:shadow-card transition-all hover:-translate-y-0.5 active:scale-[0.98] group"
               >
                 <div className={`w-10 h-10 rounded-lg ${action.color} flex items-center justify-center mb-3`}>
                   <action.icon size={20} className="text-primary-foreground" />
@@ -101,8 +79,8 @@ const Index = () => {
       </div>
 
       {/* Tips Section */}
-      <div className="px-4 mt-6 mb-6">
-        <h2 className="text-lg font-bold text-foreground mb-3 font-serif">Today's Tip</h2>
+      <div className="px-4 sm:px-0 mt-8 mb-8">
+        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">Today's Tip</h2>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}

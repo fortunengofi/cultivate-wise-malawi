@@ -38,27 +38,27 @@ const technologies = [
 
 const AgriTech = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-6xl mx-auto">
       <PageHeader
         title="AgriTech Innovations"
         subtitle="Modern farming technologies available in Malawi"
       />
 
-      <div className="px-4 mt-4 space-y-5 pb-6">
+      <div className="px-4 sm:px-0 mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 pb-8">
         {technologies.map((tech, index) => (
           <motion.div
             key={tech.title}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.12 }}
+            transition={{ delay: index * 0.1 }}
             className="bg-card rounded-xl overflow-hidden shadow-card border border-border"
           >
-            <div className="h-44 overflow-hidden">
-              <img src={tech.image} alt={tech.title} className="w-full h-full object-cover" />
+            <div className="h-48 overflow-hidden">
+              <img src={tech.image} alt={tech.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
-            <div className="p-4">
+            <div className="p-5">
               <h3 className="font-bold text-foreground text-lg font-serif">{tech.title}</h3>
-              <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{tech.description}</p>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{tech.description}</p>
 
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {tech.benefits.map((benefit) => (
@@ -71,7 +71,7 @@ const AgriTech = () => {
                 ))}
               </div>
 
-              <div className="mt-3 bg-leaf-light rounded-lg p-3">
+              <div className="mt-4 bg-leaf-light rounded-lg p-3">
                 <p className="text-xs text-primary font-semibold">
                   📍 {tech.availability}
                 </p>
