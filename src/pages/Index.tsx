@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain } from "lucide-react";
+import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain, TrendingUp, MessageCircle } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 
 const quickActions = [
   { to: "/soil", icon: Leaf, label: "Soil AI", description: "Analyze soil & get crop tips", color: "gradient-earth" },
+  { to: "/insights", icon: TrendingUp, label: "Profit Insights", description: "Market prices & calculator", color: "gradient-harvest" },
+  { to: "/market", icon: ShoppingCart, label: "Market", description: "Buy & sell produce", color: "gradient-earth" },
+  { to: "/messages", icon: MessageCircle, label: "Messages", description: "Chat with buyers/sellers", color: "gradient-sky" },
+  { to: "/records", icon: BookOpen, label: "Records", description: "Track expenses & budgets", color: "gradient-earth" },
   { to: "/agritech", icon: Cpu, label: "AgriTech", description: "Modern farming tech", color: "gradient-harvest" },
   { to: "/services", icon: Building2, label: "Services", description: "Agencies & support", color: "gradient-sky" },
-  { to: "/records", icon: BookOpen, label: "Records", description: "Track expenses & budgets", color: "gradient-earth" },
-  { to: "/market", icon: ShoppingCart, label: "Market", description: "Buy & sell produce", color: "gradient-harvest" },
 ];
 
 const weatherInfo = {

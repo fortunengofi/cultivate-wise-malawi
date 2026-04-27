@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn } from "lucide-react";
+import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/soil", icon: Leaf, label: "Soil AI" },
+  { to: "/insights", icon: TrendingUp, label: "Insights" },
   { to: "/agritech", icon: Cpu, label: "AgriTech" },
   { to: "/services", icon: Building2, label: "Services" },
   { to: "/records", icon: BookOpen, label: "Records" },
