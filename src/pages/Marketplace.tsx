@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, MapPin, MessageCircle, Plus, Loader2, Trash2 } from "lucide-react";
+import { Search, MapPin, MessageCircle, Plus, Loader2, Trash2, ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +23,7 @@ interface Listing {
   location: string;
   description: string | null;
   emoji: string;
+  image_url: string | null;
   created_at: string;
 }
 interface ProfileLite { user_id: string; display_name: string | null; }
@@ -43,6 +44,18 @@ const Marketplace = () => {
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [posting, setPosting] = useState(false);
   const [newListing, setNewListing] = useState({ product: "", category: "", quantity: "", price: "", location: "", description: "" });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!f.type.startsWith("image/")) { toast.error("Please select an image"); return; }
+    if (f.size > 5 * 1024 * 1024) { toast.error("Image must be under 5MB"); return; }
+    setImageFile(f);
+    setImagePreview(URL.createObjectURL(f));
+  };
 
   const loadListings = async () => {
     setLoading(true);
@@ -79,6 +92,14 @@ const Marketplace = () => {
       toast.error("Fill in all required fields"); return;
     }
     setPosting(true);
+    let image_url: string | null = null;
+    if (imageFile) {
+      const ext = imageFile.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("listing-images").upload(path, imageFile);
+      if (upErr) { toast.error(upErr.message); setPosting(false); return; }
+      image_url = supabase.storage.from("listing-images").getPublicUrl(path).data.publicUrl;
+    }
     const { error } = await supabase.from("listings").insert({
       user_id: user.id,
       product: newListing.product.slice(0, 100),
@@ -88,10 +109,12 @@ const Marketplace = () => {
       location: newListing.location.slice(0, 100),
       description: newListing.description.slice(0, 500) || null,
       emoji: emojiByCategory[newListing.category] || "🌾",
+      image_url,
     });
     setPosting(false);
     if (error) { toast.error(error.message); return; }
     setNewListing({ product: "", category: "", quantity: "", price: "", location: "", description: "" });
+    setImageFile(null); setImagePreview(null);
     setShowPostDialog(false);
     toast.success("Listing posted!");
     loadListings();
@@ -155,6 +178,21 @@ const Marketplace = () => {
               <Input placeholder="Price (e.g., MK 500/kg) *" value={newListing.price} onChange={(e) => setNewListing({ ...newListing, price: e.target.value })} maxLength={50} />
               <Input placeholder="Location *" value={newListing.location} onChange={(e) => setNewListing({ ...newListing, location: e.target.value })} maxLength={100} />
               <Textarea placeholder="Description (optional)" value={newListing.description} onChange={(e) => setNewListing({ ...newListing, description: e.target.value })} maxLength={500} rows={2} />
+              <div className="space-y-2">
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePickImage} />
+                {imagePreview ? (
+                  <div className="relative">
+                    <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                    <button type="button" onClick={() => { setImageFile(null); setImagePreview(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="absolute top-1 right-1 bg-background/90 rounded-full p-1">
+                      <X size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="w-full border-dashed">
+                    <ImagePlus size={16} className="mr-2" /> Add Product Photo
+                  </Button>
+                )}
+              </div>
               <Button onClick={post} disabled={posting} className="w-full gradient-earth text-primary-foreground border-0 font-bold">
                 {posting ? <Loader2 className="animate-spin" size={16} /> : "Post Listing"}
               </Button>
@@ -176,6 +214,9 @@ const Marketplace = () => {
                 const posted = new Date(listing.created_at).toLocaleDateString();
                 return (
                   <motion.div key={listing.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index * 0.04, 0.3) }} className="bg-card rounded-xl p-4 shadow-card border border-border hover:shadow-elevated transition-shadow">
+                    {listing.image_url && (
+                      <img src={listing.image_url} alt={listing.product} className="w-full h-36 object-cover rounded-lg mb-3" loading="lazy" />
+                    )}
                     <div className="flex items-start gap-3">
                       <span className="text-3xl">{listing.emoji}</span>
                       <div className="flex-1 min-w-0">

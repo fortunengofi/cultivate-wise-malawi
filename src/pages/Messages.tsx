@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Loader2, Send, ArrowLeft, MessageCircle, Package } from "lucide-react";
+import { Loader2, Send, ArrowLeft, MessageCircle, Package, Paperclip, X, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PageHeader from "@/components/PageHeader";
@@ -24,6 +24,8 @@ interface Message {
   conversation_id: string;
   sender_id: string;
   content: string;
+  media_url: string | null;
+  media_type: string | null;
   created_at: string;
 }
 
@@ -37,6 +39,27 @@ const Messages = () => {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+
+  const pickMedia = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const isImg = f.type.startsWith("image/");
+    const isVid = f.type.startsWith("video/");
+    if (!isImg && !isVid) { toast.error("Only images or videos"); return; }
+    if (f.size > 25 * 1024 * 1024) { toast.error("File must be under 25MB"); return; }
+    setMediaFile(f);
+    setMediaPreview(URL.createObjectURL(f));
+  };
+
+  const clearMedia = () => {
+    setMediaFile(null);
+    setMediaPreview(null);
+    if (fileRef.current) fileRef.current.value = "";
+  };
 
   const activeConv = conversations.find((c) => c.id === conversationId);
 
@@ -103,16 +126,30 @@ const Messages = () => {
   }, [messages]);
 
   const send = async () => {
-    if (!text.trim() || !conversationId || !user) return;
+    if ((!text.trim() && !mediaFile) || !conversationId || !user) return;
     setSending(true);
+    let media_url: string | null = null;
+    let media_type: string | null = null;
+    if (mediaFile) {
+      setUploadingMedia(true);
+      const ext = mediaFile.name.split(".").pop() || "bin";
+      const path = `${user.id}/${conversationId}/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("chat-media").upload(path, mediaFile);
+      setUploadingMedia(false);
+      if (upErr) { toast.error(upErr.message); setSending(false); return; }
+      media_url = supabase.storage.from("chat-media").getPublicUrl(path).data.publicUrl;
+      media_type = mediaFile.type.startsWith("image/") ? "image" : "video";
+    }
     const { error } = await supabase.from("messages").insert({
       conversation_id: conversationId,
       sender_id: user.id,
       content: text.trim(),
+      media_url,
+      media_type,
     });
     setSending(false);
     if (error) toast.error(error.message);
-    else { setText(""); loadConversations(); }
+    else { setText(""); clearMedia(); loadConversations(); }
   };
 
   return (
@@ -179,7 +216,15 @@ const Messages = () => {
                           <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${
                             mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border border-border rounded-bl-sm"
                           }`}>
-                            {m.content}
+                            {m.media_url && m.media_type === "image" && (
+                              <a href={m.media_url} target="_blank" rel="noreferrer">
+                                <img src={m.media_url} alt="shared" className="rounded-lg max-h-60 mb-1 object-cover" loading="lazy" />
+                              </a>
+                            )}
+                            {m.media_url && m.media_type === "video" && (
+                              <video src={m.media_url} controls className="rounded-lg max-h-60 mb-1 w-full" />
+                            )}
+                            {m.content && <div>{m.content}</div>}
                             <p className={`text-[10px] mt-0.5 ${mine ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
                               {new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </p>
@@ -189,16 +234,36 @@ const Messages = () => {
                     })}
                   </div>
 
-                  <div className="p-3 border-t border-border flex gap-2">
-                    <Input
-                      placeholder="Type a message..."
-                      value={text}
-                      onChange={(e) => setText(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && send()}
-                    />
-                    <Button onClick={send} disabled={sending || !text.trim()} className="gradient-earth text-primary-foreground border-0">
-                      {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
-                    </Button>
+                  <div className="p-3 border-t border-border space-y-2">
+                    {mediaPreview && (
+                      <div className="relative inline-block">
+                        {mediaFile?.type.startsWith("image/") ? (
+                          <img src={mediaPreview} alt="preview" className="h-20 rounded-lg object-cover" />
+                        ) : (
+                          <div className="h-20 w-20 rounded-lg bg-muted flex items-center justify-center">
+                            <Video size={24} className="text-muted-foreground" />
+                          </div>
+                        )}
+                        <button onClick={clearMedia} className="absolute -top-1 -right-1 bg-background border border-border rounded-full p-0.5">
+                          <X size={12} />
+                        </button>
+                      </div>
+                    )}
+                    <div className="flex gap-2">
+                      <input ref={fileRef} type="file" accept="image/*,video/*" className="hidden" onChange={pickMedia} />
+                      <Button type="button" variant="outline" size="icon" onClick={() => fileRef.current?.click()} title="Attach photo or video">
+                        <Paperclip size={16} />
+                      </Button>
+                      <Input
+                        placeholder="Type a message..."
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && send()}
+                      />
+                      <Button onClick={send} disabled={sending || (!text.trim() && !mediaFile)} className="gradient-earth text-primary-foreground border-0">
+                        {sending || uploadingMedia ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
+                      </Button>
+                    </div>
                   </div>
                 </>
               ) : (
