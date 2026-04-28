@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import TopNav from "./TopNav";
+import Footer from "./Footer";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <main className="flex-1 overflow-y-auto">
         {children}
       </main>
+      <Footer />
     </div>
   );
 };
