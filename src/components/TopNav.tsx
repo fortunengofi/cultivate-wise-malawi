@@ -33,10 +33,10 @@ const TopNav = () => {
               <Leaf size={18} className="text-primary-foreground" />
             </div>
             <span className="font-serif font-bold text-foreground text-lg hidden sm:block">
-              Ulimi Wanzeru
+              Farm Link
             </span>
             <span className="font-serif font-bold text-foreground text-base sm:hidden">
-              Ulimi
+              Farm Link
             </span>
           </NavLink>
 

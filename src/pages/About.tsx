@@ -13,7 +13,7 @@ const About = () => {
           <Code2 size={36} className="text-primary-foreground" />
         </div>
         <h1 className="text-3xl font-serif font-bold text-foreground">About the Developer</h1>
-        <p className="text-muted-foreground mt-2">The person behind Ulimi Wanzeru</p>
+        <p className="text-muted-foreground mt-2">The person behind Farm Link</p>
       </motion.div>
 
       <motion.div
@@ -33,7 +33,7 @@ const About = () => {
         </div>
 
         <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-          Fortune Mwangofi built <strong className="text-foreground">Ulimi Wanzeru</strong> to empower Malawian smallholder
+          Fortune Mwangofi built <strong className="text-foreground">Farm Link</strong> to empower Malawian smallholder
           farmers with AI-powered soil analysis, market access, financial tracking, and direct
           buyer-seller communication — all from a phone.
         </p>
@@ -74,7 +74,7 @@ const About = () => {
           <Leaf size={20} className="text-primary-foreground shrink-0 mt-0.5" />
           <p className="text-xs text-primary-foreground/90 leading-relaxed">
             Have feedback, ideas, or partnership requests? Reach out anytime — every farmer's
-            voice helps shape the future of Ulimi Wanzeru.
+            voice helps shape the future of Farm Link.
           </p>
         </div>
       </motion.div>

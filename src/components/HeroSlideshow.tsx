@@ -9,7 +9,7 @@ import solarImg from "@/assets/agritech-solar.jpg";
 const slides = [
   {
     image: heroFarm,
-    title: "Ulimi Wanzeru",
+    title: "Farm Link",
     subtitle: "Smart Farming for Malawi 🌾",
     overlay: "from-foreground/70 via-foreground/40 to-transparent",
   },
