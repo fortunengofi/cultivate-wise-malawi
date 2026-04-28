@@ -11,7 +11,7 @@ const Footer = () => {
               <div className="w-8 h-8 rounded-lg gradient-earth flex items-center justify-center">
                 <Leaf size={16} className="text-primary-foreground" />
               </div>
-              <span className="font-serif font-bold text-foreground">Ulimi Wanzeru</span>
+              <span className="font-serif font-bold text-foreground">Farm Link</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Smart farming tools for Malawian smallholder farmers — AI soil analysis, marketplace, and profit insights.
@@ -45,7 +45,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-6 pt-4 border-t border-border text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Ulimi Wanzeru. Built by Fortune Mwangofi.
+          © {new Date().getFullYear()} Farm Link. Built by Fortune Mwangofi.
         </div>
       </div>
     </footer>

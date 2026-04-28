@@ -1,4 +1,4 @@
-const CACHE = 'ulimi-v1';
+const CACHE = 'farmlink-v1';
 const ASSETS = ['/', '/offline.html', '/manifest.json', '/icon-192.png', '/icon-512.png', '/favicon.png'];
 
 self.addEventListener('install', (e) => {

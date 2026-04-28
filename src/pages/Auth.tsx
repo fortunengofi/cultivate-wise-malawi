@@ -65,7 +65,7 @@ const Auth = () => {
           <div className="w-14 h-14 rounded-2xl gradient-earth mx-auto flex items-center justify-center mb-3 shadow-card">
             <Leaf size={28} className="text-primary-foreground" />
           </div>
-          <h1 className="font-serif font-bold text-2xl text-foreground">Ulimi Wanzeru</h1>
+          <h1 className="font-serif font-bold text-2xl text-foreground">Farm Link</h1>
           <p className="text-sm text-muted-foreground mt-1">Smart farming for Malawi</p>
         </div>
 
