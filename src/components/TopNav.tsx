@@ -8,7 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
-  { to: "/soil", icon: Leaf, label: "Soil AI" },
+  { to: "/soil", icon: Leaf, label: "Farm AI" },
   { to: "/insights", icon: TrendingUp, label: "Insights" },
   { to: "/agritech", icon: Cpu, label: "AgriTech" },
   { to: "/services", icon: Building2, label: "Services" },
