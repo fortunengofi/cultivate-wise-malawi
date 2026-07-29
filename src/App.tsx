@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import SoilAnalyzer from "./pages/SoilAnalyzer";
@@ -28,7 +29,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppLayout>
+          <LanguageProvider>
+            <AppLayout>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
@@ -44,7 +46,8 @@ const App = () => (
               <Route path="/messages/:conversationId" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </AppLayout>
+            </AppLayout>
+          </LanguageProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
