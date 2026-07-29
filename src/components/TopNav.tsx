@@ -1,27 +1,29 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn, TrendingUp } from "lucide-react";
+import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn, TrendingUp, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
-const navItems = [
-  { to: "/", icon: Home, label: "Home" },
-  { to: "/soil", icon: Leaf, label: "Farm AI" },
-  { to: "/insights", icon: TrendingUp, label: "Insights" },
-  { to: "/agritech", icon: Cpu, label: "AgriTech" },
-  { to: "/services", icon: Building2, label: "Services" },
-  { to: "/records", icon: BookOpen, label: "Records" },
-  { to: "/market", icon: ShoppingCart, label: "Market" },
-  { to: "/messages", icon: MessageCircle, label: "Chats" },
-];
 
 const TopNav = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { t, lang, setLang } = useLanguage();
+
+  const navItems = [
+    { to: "/", icon: Home, label: t("navHome") },
+    { to: "/soil", icon: Leaf, label: t("navFarmAI") },
+    { to: "/insights", icon: TrendingUp, label: t("navInsights") },
+    { to: "/agritech", icon: Cpu, label: t("navAgriTech") },
+    { to: "/services", icon: Building2, label: t("navServices") },
+    { to: "/records", icon: BookOpen, label: t("navRecords") },
+    { to: "/market", icon: ShoppingCart, label: t("navMarket") },
+    { to: "/messages", icon: MessageCircle, label: t("navChats") },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-lg border-b border-border shadow-soft">
@@ -69,6 +71,15 @@ const TopNav = () => {
           </nav>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setLang(lang === "en" ? "ny" : "en")}
+              className="flex items-center gap-1 px-2 h-8 rounded-md border border-border text-xs font-bold text-foreground hover:bg-muted/50 transition-colors"
+              aria-label="Toggle language"
+              title={t("langLabel")}
+            >
+              <Globe size={14} />
+              {lang === "en" ? "EN" : "CH"}
+            </button>
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -80,23 +91,23 @@ const TopNav = () => {
                   <div className="px-2 py-1.5 text-xs text-muted-foreground truncate">{user.email}</div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate("/profile")}>
-                    <UserIcon size={14} className="mr-2" /> My Profile
+                    <UserIcon size={14} className="mr-2" /> {t("navProfile")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/messages")}>
-                    <MessageCircle size={14} className="mr-2" /> Messages
+                    <MessageCircle size={14} className="mr-2" /> {t("navMessages")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/records")}>
-                    <BookOpen size={14} className="mr-2" /> My Records
+                    <BookOpen size={14} className="mr-2" /> {t("navMyRecords")}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={async () => { await signOut(); navigate("/"); }}>
-                    <LogOut size={14} className="mr-2" /> Sign Out
+                    <LogOut size={14} className="mr-2" /> {t("signOut")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Button size="sm" onClick={() => navigate("/auth")} className="gradient-earth text-primary-foreground border-0 font-bold h-8">
-                <LogIn size={14} className="mr-1" /> Sign In
+                <LogIn size={14} className="mr-1" /> {t("signIn")}
               </Button>
             )}
 
