@@ -2,24 +2,24 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain, TrendingUp, MessageCircle } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
-
-const quickActions = [
-  { to: "/soil", icon: Leaf, label: "Soil AI", description: "Analyze soil & get crop tips", color: "gradient-earth" },
-  { to: "/insights", icon: TrendingUp, label: "Profit Insights", description: "Market prices & calculator", color: "gradient-harvest" },
-  { to: "/market", icon: ShoppingCart, label: "Market", description: "Buy & sell produce", color: "gradient-earth" },
-  { to: "/messages", icon: MessageCircle, label: "Messages", description: "Chat with buyers/sellers", color: "gradient-sky" },
-  { to: "/records", icon: BookOpen, label: "Records", description: "Track expenses & budgets", color: "gradient-earth" },
-  { to: "/agritech", icon: Cpu, label: "AgriTech", description: "Modern farming tech", color: "gradient-harvest" },
-  { to: "/services", icon: Building2, label: "Services", description: "Agencies & support", color: "gradient-sky" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const weatherInfo = {
   temp: "28°C",
-  condition: "Partly Cloudy",
   humidity: "65%",
 };
 
 const Index = () => {
+  const { t } = useLanguage();
+  const quickActions = [
+    { to: "/soil", icon: Leaf, label: t("soilAI"), description: t("soilAIDesc"), color: "gradient-earth" },
+    { to: "/insights", icon: TrendingUp, label: t("profitInsights"), description: t("profitInsightsDesc"), color: "gradient-harvest" },
+    { to: "/market", icon: ShoppingCart, label: t("navMarket"), description: t("marketDesc"), color: "gradient-earth" },
+    { to: "/messages", icon: MessageCircle, label: t("navMessages"), description: t("messagesDesc"), color: "gradient-sky" },
+    { to: "/records", icon: BookOpen, label: t("navRecords"), description: t("recordsDesc"), color: "gradient-earth" },
+    { to: "/agritech", icon: Cpu, label: t("navAgriTech"), description: t("agritechDesc"), color: "gradient-harvest" },
+    { to: "/services", icon: Building2, label: t("navServices"), description: t("servicesDesc"), color: "gradient-sky" },
+  ];
   return (
     <div className="flex flex-col max-w-6xl mx-auto">
       {/* Hero Slideshow */}
@@ -40,15 +40,15 @@ const Index = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{weatherInfo.temp}</p>
-                <p className="text-xs text-muted-foreground font-medium">{weatherInfo.condition}</p>
+                <p className="text-xs text-muted-foreground font-medium">{t("partlyCloudy")}</p>
               </div>
             </div>
             <div className="text-right">
               <div className="flex items-center gap-1 text-muted-foreground">
                 <CloudRain size={14} />
-                <span className="text-xs font-semibold">Humidity: {weatherInfo.humidity}</span>
+                <span className="text-xs font-semibold">{t("humidity")}: {weatherInfo.humidity}</span>
               </div>
-              <p className="text-xs text-muted-foreground mt-0.5">Good planting weather</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{t("goodPlanting")}</p>
             </div>
           </div>
         </div>
@@ -56,7 +56,7 @@ const Index = () => {
 
       {/* Quick Actions */}
       <div className="px-4 sm:px-0 mt-8">
-        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">Quick Actions</h2>
+        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">{t("quickActions")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {quickActions.map((action, index) => (
             <motion.div
@@ -82,7 +82,7 @@ const Index = () => {
 
       {/* Tips Section */}
       <div className="px-4 sm:px-0 mt-8 mb-8">
-        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">Today's Tip</h2>
+        <h2 className="text-lg font-bold text-foreground mb-4 font-serif">{t("todaysTip")}</h2>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -92,11 +92,9 @@ const Index = () => {
           <div className="flex items-start gap-3">
             <div className="text-3xl">🌱</div>
             <div>
-              <h3 className="font-bold text-primary-foreground text-sm">Maize Planting Season</h3>
+              <h3 className="font-bold text-primary-foreground text-sm">{t("maizeTip")}</h3>
               <p className="text-primary-foreground/80 text-xs mt-1 leading-relaxed">
-                The rainy season is starting — prepare your fields with compost and ensure proper spacing 
-                of 75cm between rows for optimal maize growth. Consider intercropping with legumes for 
-                soil nitrogen fixation.
+                {t("maizeTipBody")}
               </p>
             </div>
           </div>

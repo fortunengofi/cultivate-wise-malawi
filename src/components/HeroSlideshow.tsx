@@ -5,35 +5,17 @@ import heroFarm from "@/assets/hero-farm.jpg";
 import irrigationImg from "@/assets/agritech-irrigation.jpg";
 import greenhouseImg from "@/assets/agritech-greenhouse.jpg";
 import solarImg from "@/assets/agritech-solar.jpg";
-
-const slides = [
-  {
-    image: heroFarm,
-    title: "Farm Link",
-    subtitle: "Smart Farming for Malawi 🌾",
-    overlay: "from-foreground/70 via-foreground/40 to-transparent",
-  },
-  {
-    image: irrigationImg,
-    title: "Modern Irrigation",
-    subtitle: "Save water, boost your yields with drip systems",
-    overlay: "from-foreground/70 via-foreground/40 to-transparent",
-  },
-  {
-    image: greenhouseImg,
-    title: "Greenhouse Farming",
-    subtitle: "Grow high-value crops all year round",
-    overlay: "from-foreground/70 via-foreground/40 to-transparent",
-  },
-  {
-    image: solarImg,
-    title: "Solar-Powered Future",
-    subtitle: "Harness Malawi's sunshine for your farm",
-    overlay: "from-foreground/70 via-foreground/40 to-transparent",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSlideshow = () => {
+  const { t } = useLanguage();
+  const overlay = "from-foreground/70 via-foreground/40 to-transparent";
+  const slides = [
+    { image: heroFarm, title: t("slide1Title"), subtitle: t("slide1Sub"), overlay },
+    { image: irrigationImg, title: t("slide2Title"), subtitle: t("slide2Sub"), overlay },
+    { image: greenhouseImg, title: t("slide3Title"), subtitle: t("slide3Sub"), overlay },
+    { image: solarImg, title: t("slide4Title"), subtitle: t("slide4Sub"), overlay },
+  ];
   const [current, setCurrent] = useState(0);
 
   const next = useCallback(() => {
