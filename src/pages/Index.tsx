@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain, TrendingUp, MessageCircle, Compass, ArrowRight } from "lucide-react";
+import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, CloudRain, TrendingUp, MessageCircle, Compass, ArrowRight } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFarm } from "@/contexts/FarmContext";
