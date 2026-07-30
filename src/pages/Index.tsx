@@ -1,16 +1,21 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain, TrendingUp, MessageCircle } from "lucide-react";
+import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, Sun, CloudRain, TrendingUp, MessageCircle, Compass, ArrowRight } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const weatherInfo = {
-  temp: "28°C",
-  humidity: "65%",
-};
+import { useFarm } from "@/contexts/FarmContext";
+import { conditionIcon } from "@/pages/Weather";
 
 const Index = () => {
   const { t } = useLanguage();
+  const { weather, timeline, irrigation, best, prices, crop } = useFarm();
+  const weatherInfo = { temp: `${weather.current.temp}°C`, humidity: `${weather.current.humidity}%` };
+  const smartCards = [
+    { to: "/weather", emoji: "🌦️", title: t("navWeather"), line1: `${weather.current.temp}°C | ${weather.current.condition}`, line2: `Rain probability: ${weather.current.rainChance}%` },
+    { to: "/calendar", emoji: "🌱", title: "Today's Farm Task", line1: `${timeline.current.name} — ${crop}`, line2: `Due now • ${timeline.current.window}` },
+    { to: "/irrigation", emoji: "💧", title: t("navIrrigation"), line1: `${irrigation.moisture} soil moisture`, line2: irrigation.headline.replace(/^[^\w]+/, "") },
+    { to: "/prices", emoji: "📈", title: "Market", line1: `${crop} — best price`, line2: `MWK ${best.price.toLocaleString()}/${prices.unit} • ${best.market}` },
+  ];
   const quickActions = [
     { to: "/soil", icon: Leaf, label: t("soilAI"), description: t("soilAIDesc"), color: "gradient-earth" },
     { to: "/insights", icon: TrendingUp, label: t("profitInsights"), description: t("profitInsightsDesc"), color: "gradient-harvest" },
@@ -53,6 +58,33 @@ const Index = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Today at a glance */}
+      <div className="px-4 sm:px-0 mt-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-foreground font-serif">{t("todayAtGlance")}</h2>
+          <Link to="/plan" className="text-sm font-bold text-primary flex items-center gap-1">
+            <Compass size={14} /> {t("openFullPlan")}
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {smartCards.map((c) => (
+            <Link
+              key={c.to}
+              to={c.to}
+              className="bg-card rounded-xl p-4 border border-border shadow-soft hover:shadow-card transition-all active:scale-[0.98] flex items-start gap-3"
+            >
+              <span className="text-2xl leading-none">{c.emoji}</span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{c.title}</p>
+                <p className="font-bold text-foreground text-sm mt-0.5">{c.line1}</p>
+                <p className="text-xs text-muted-foreground leading-snug">{c.line2}</p>
+              </div>
+              <ArrowRight size={16} className="text-primary shrink-0 mt-1" />
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {/* Quick Actions */}
       <div className="px-4 sm:px-0 mt-8">
