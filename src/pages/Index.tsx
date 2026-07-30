@@ -40,12 +40,12 @@ const Index = () => {
         <div className="bg-card rounded-xl p-4 shadow-card border border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full gradient-sky flex items-center justify-center">
-                <Sun size={24} className="text-sky-foreground" />
+              <div className="w-12 h-12 rounded-full gradient-sky flex items-center justify-center text-2xl">
+                {conditionIcon(weather.current.condition)}
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{weatherInfo.temp}</p>
-                <p className="text-xs text-muted-foreground font-medium">{t("partlyCloudy")}</p>
+                <p className="text-xs text-muted-foreground font-medium">{weather.current.condition}</p>
               </div>
             </div>
             <div className="text-right">
