@@ -15,19 +15,19 @@ const TopNav = () => {
   const { t, lang, setLang } = useLanguage();
 
   const navItems = [
-    { to: "/", icon: Home, label: t("navHome") },
-    { to: "/plan", icon: Compass, label: t("navPlan") },
-    { to: "/weather", icon: CloudSun, label: t("navWeather") },
-    { to: "/calendar", icon: CalendarDays, label: t("navCalendar") },
-    { to: "/irrigation", icon: Droplets, label: t("navIrrigation") },
-    { to: "/prices", icon: BarChart3, label: t("navPrices") },
-    { to: "/soil", icon: Leaf, label: t("navFarmAI") },
-    { to: "/insights", icon: TrendingUp, label: t("navInsights") },
-    { to: "/agritech", icon: Cpu, label: t("navAgriTech") },
-    { to: "/services", icon: Building2, label: t("navServices") },
-    { to: "/records", icon: BookOpen, label: t("navRecords") },
-    { to: "/market", icon: ShoppingCart, label: t("navMarket") },
-    { to: "/messages", icon: MessageCircle, label: t("navChats") },
+    { to: "/", icon: Home, label: t("navHome"), desktop: true },
+    { to: "/plan", icon: Compass, label: t("navPlan"), desktop: true },
+    { to: "/weather", icon: CloudSun, label: t("navWeather"), desktop: true },
+    { to: "/calendar", icon: CalendarDays, label: t("navCalendar"), desktop: false },
+    { to: "/irrigation", icon: Droplets, label: t("navIrrigation"), desktop: false },
+    { to: "/prices", icon: BarChart3, label: t("navPrices"), desktop: true },
+    { to: "/soil", icon: Leaf, label: t("navFarmAI"), desktop: true },
+    { to: "/insights", icon: TrendingUp, label: t("navInsights"), desktop: true },
+    { to: "/agritech", icon: Cpu, label: t("navAgriTech"), desktop: false },
+    { to: "/services", icon: Building2, label: t("navServices"), desktop: false },
+    { to: "/records", icon: BookOpen, label: t("navRecords"), desktop: false },
+    { to: "/market", icon: ShoppingCart, label: t("navMarket"), desktop: true },
+    { to: "/messages", icon: MessageCircle, label: t("navChats"), desktop: true },
   ];
 
   return (
@@ -49,7 +49,7 @@ const TopNav = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map(({ to, icon: Icon, label }) => {
+            {navItems.filter((n) => n.desktop).map(({ to, icon: Icon, label }) => {
               const isActive = location.pathname === to;
               return (
                 <NavLink
