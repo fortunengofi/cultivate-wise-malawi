@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn, TrendingUp, Globe } from "lucide-react";
+import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart, Menu, X, MessageCircle, User as UserIcon, LogOut, LogIn, TrendingUp, Globe, CloudSun, CalendarDays, Droplets, Compass, BarChart3 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,6 +16,11 @@ const TopNav = () => {
 
   const navItems = [
     { to: "/", icon: Home, label: t("navHome") },
+    { to: "/plan", icon: Compass, label: t("navPlan") },
+    { to: "/weather", icon: CloudSun, label: t("navWeather") },
+    { to: "/calendar", icon: CalendarDays, label: t("navCalendar") },
+    { to: "/irrigation", icon: Droplets, label: t("navIrrigation") },
+    { to: "/prices", icon: BarChart3, label: t("navPrices") },
     { to: "/soil", icon: Leaf, label: t("navFarmAI") },
     { to: "/insights", icon: TrendingUp, label: t("navInsights") },
     { to: "/agritech", icon: Cpu, label: t("navAgriTech") },
