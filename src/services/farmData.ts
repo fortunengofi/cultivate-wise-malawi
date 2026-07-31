@@ -320,9 +320,18 @@ function inWindow(month: number, start: number, end: number) {
   return start <= end ? month >= start && month <= end : month >= start || month <= end;
 }
 
-export function getCropTimeline(crop: string, now = new Date()) {
+function shiftLabel(month: number, shiftWeeks: number, edge: "start" | "end") {
+  const m = MONTHS[((month % 12) + 12) % 12];
+  if (shiftWeeks >= 2) return `${edge === "start" ? "mid" : "late"} ${m}`;
+  if (shiftWeeks <= -2) return `${edge === "start" ? "early" : "mid"} ${m}`;
+  return m;
+}
+
+export function getCropTimeline(crop: string, now = new Date(), shiftWeeks = 0) {
   const plan = CROP_PLANS[crop] ?? CROP_PLANS.Maize;
-  const m = now.getMonth();
+  // A district that plants later effectively "runs behind" the national calendar.
+  const adjusted = new Date(now.getTime() - shiftWeeks * 7 * 86400000);
+  const m = adjusted.getMonth();
   let currentIdx = plan.stages.findIndex((s) => inWindow(m, s.startMonth, s.endMonth));
   if (currentIdx === -1) {
     // between cycles: the next stage that starts soonest
@@ -332,10 +341,10 @@ export function getCropTimeline(crop: string, now = new Date()) {
   const stages: StageStatus[] = plan.stages.map((s, i) => ({
     ...s,
     status: i < currentIdx ? "done" : i === currentIdx ? "current" : "upcoming",
-    window: `${MONTHS[s.startMonth]} – ${MONTHS[s.endMonth]}`,
+    window: `${shiftLabel(s.startMonth, shiftWeeks, "start")} – ${shiftLabel(s.endMonth, shiftWeeks, "end")}`,
   }));
   const progress = Math.round(((currentIdx + 0.5) / plan.stages.length) * 100);
-  return { plan, stages, current: stages[currentIdx], next: stages[currentIdx + 1], progress };
+  return { plan, stages, current: stages[currentIdx], next: stages[currentIdx + 1], progress, shiftWeeks };
 }
 
 /* --------------------------- IRRIGATION ASSISTANT -------------------------- */
@@ -358,11 +367,30 @@ export function estimateMoisture(w: WeatherData): Moisture {
   return "Low";
 }
 
-export function getIrrigationAdvice(w: WeatherData, crop: string, moistureOverride?: Moisture): IrrigationResult {
+export type IrrigationMethod = "Watering cans" | "Treadle pump" | "Motor pump / hose" | "Drip kit" | "Rain-fed only";
+
+export interface IrrigationProfile {
+  soil?: SoilType;
+  method?: IrrigationMethod;
+  fieldSizeHa?: number;
+}
+
+/** Litres per hectare per mm of water applied. */
+const MM_TO_LITRES_PER_HA = 10000;
+
+export function getIrrigationAdvice(
+  w: WeatherData,
+  crop: string,
+  moistureOverride?: Moisture,
+  profile: IrrigationProfile = {},
+): IrrigationResult {
   const plan = CROP_PLANS[crop] ?? CROP_PLANS.Maize;
   const moisture = moistureOverride ?? estimateMoisture(w);
   const rainSoon = Math.max(w.current.rainChance, w.forecast[1]?.rainChance ?? 0);
   const temp = w.current.temp;
+  const soil = profile.soil ?? w.location.soil;
+  const method = profile.method ?? "Watering cans";
+  const sizeHa = profile.fieldSizeHa && profile.fieldSizeHa > 0 ? profile.fieldSizeHa : 0.4;
 
   let score = 0;
   const reasons: string[] = [];
@@ -381,10 +409,38 @@ export function getIrrigationAdvice(w: WeatherData, crop: string, moistureOverri
   if (plan.waterNeed >= 1.3) { score += 1; reasons.push(`${plan.crop} is a thirsty crop and needs steady watering.`); }
   else if (plan.waterNeed < 0.9) { score -= 1; reasons.push(`${plan.crop} tolerates drier conditions than most crops.`); }
 
+  if (soil === "Sandy") { score += 1; reasons.push("Sandy soil drains fast — it needs smaller amounts of water, more often."); }
+  else if (soil === "Clay") { score -= 1; reasons.push("Clay soil holds water longer — avoid over-watering or the roots will suffocate."); }
+  else reasons.push("Loam soil holds moisture well — water deeply but less often.");
+
+  if (method === "Rain-fed only") reasons.push("You depend on rainfall, so focus on mulching and ridging to keep the water you already have.");
+  else if (method === "Drip kit") reasons.push("With a drip kit you can apply water slowly and lose very little to evaporation.");
+
   let headline: string, action: string, tone: IrrigationResult["tone"];
   if (score >= 4) { headline = "💧 Irrigation recommended today"; action = "Water in the early morning or late afternoon to reduce evaporation."; tone = "warn"; }
   else if (score >= 2) { headline = "🌤️ Light irrigation may help"; action = "Check the soil at about 10cm depth. If it is dry in your hand, apply a light watering."; tone = "info"; }
   else { headline = "✅ Irrigation may not be necessary today"; action = "Soil moisture and expected rain look sufficient. Check again tomorrow."; tone = "good"; }
 
-  return { moisture, score, action, headline, tone, reasons };
+  // Personalised water plan
+  const baseMm = score >= 4 ? 20 : score >= 2 ? 10 : 0;
+  const soilFactor = soil === "Sandy" ? 0.8 : soil === "Clay" ? 1.2 : 1;
+  const mm = Math.round(baseMm * plan.waterNeed * soilFactor);
+  const litres = Math.round(mm * MM_TO_LITRES_PER_HA * sizeHa);
+  const cansPerRound = Math.round(litres / 20);
+  const timesPerWeek = mm === 0 ? 0 : soil === "Sandy" ? 3 : soil === "Clay" ? 1 : 2;
+  const bestTime = temp >= 30 ? "05:00 – 07:00 or after 16:30" : "early morning";
+  const plans: Record<IrrigationMethod, string> = {
+    "Watering cans": `About ${cansPerRound.toLocaleString()} cans (20L) per round on ${sizeHa} ha.`,
+    "Treadle pump": `About ${Math.max(1, Math.round(litres / 3000))} hour(s) of pumping per round.`,
+    "Motor pump / hose": `About ${Math.max(1, Math.round(litres / 12000))} hour(s) of pumping per round.`,
+    "Drip kit": `Run the drip lines about ${Math.max(1, Math.round(litres / 4000))} hour(s) per round.`,
+    "Rain-fed only": "No irrigation equipment — mulch heavily and make box ridges to trap the rain.",
+  };
+
+  return {
+    moisture, score, action, headline, tone, reasons,
+    plan: mm === 0
+      ? { mm, litres: 0, timesPerWeek: 0, bestTime, method, soil, sizeHa, howMuch: "Hold off watering for now and re-check tomorrow." }
+      : { mm, litres, timesPerWeek, bestTime, method, soil, sizeHa, howMuch: plans[method] },
+  };
 }
