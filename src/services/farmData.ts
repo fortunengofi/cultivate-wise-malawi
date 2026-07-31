@@ -347,6 +347,22 @@ export function getCropTimeline(crop: string, now = new Date(), shiftWeeks = 0) 
   return { plan, stages, current: stages[currentIdx], next: stages[currentIdx + 1], progress, shiftWeeks };
 }
 
+/** Suggested reminder date for a stage in a given district (never in the past). */
+export function stageDueDate(stage: CropStage, shiftWeeks = 0, now = new Date()) {
+  const year = now.getFullYear();
+  let d = new Date(year, stage.startMonth, 1);
+  d = new Date(d.getTime() + shiftWeeks * 7 * 86400000);
+  if (d.getTime() <= now.getTime()) {
+    const next = new Date(year + 1, stage.startMonth, 1);
+    d = new Date(next.getTime() + shiftWeeks * 7 * 86400000);
+  }
+  // if the stage is already running, remind tomorrow instead of next season
+  if (inWindow(now.getMonth(), stage.startMonth, stage.endMonth)) {
+    return new Date(now.getTime() + 86400000);
+  }
+  return d;
+}
+
 /* --------------------------- IRRIGATION ASSISTANT -------------------------- */
 
 export type Moisture = "Low" | "Moderate" | "Good";
