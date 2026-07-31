@@ -3,6 +3,7 @@ import { Droplets, Wind, Sunrise, Sunset, CloudRain, ArrowRight } from "lucide-r
 import PageHeader from "@/components/PageHeader";
 import CropLocationPicker from "@/components/CropLocationPicker";
 import DemoBadge from "@/components/DemoBadge";
+import SimulationControl from "@/components/SimulationControl";
 import { useFarm } from "@/contexts/FarmContext";
 import { Condition } from "@/services/farmData";
 
@@ -26,6 +27,8 @@ const Weather = () => {
 
       <div className="px-4 sm:px-0 mt-6 space-y-6 pb-10">
         <CropLocationPicker showCrop={false} />
+
+        <SimulationControl />
 
         {/* Current conditions */}
         <section className="bg-card rounded-xl p-5 shadow-card border border-border">
