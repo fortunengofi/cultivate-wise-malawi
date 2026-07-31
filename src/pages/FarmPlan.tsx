@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import CropLocationPicker from "@/components/CropLocationPicker";
+import SimulationControl from "@/components/SimulationControl";
 import { useFarm } from "@/contexts/FarmContext";
 import { conditionIcon } from "@/pages/Weather";
 
@@ -28,6 +29,8 @@ const FarmPlan = () => {
 
       <div className="px-4 sm:px-0 mt-6 space-y-4 pb-10">
         <CropLocationPicker />
+
+        <SimulationControl />
 
         <div className="gradient-earth rounded-xl p-5 shadow-card">
           <p className="text-primary-foreground/80 text-xs font-bold uppercase tracking-wide">Your selection</p>
