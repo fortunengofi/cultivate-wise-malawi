@@ -8,18 +8,69 @@
 
 export const IS_DEMO_DATA = true;
 
-export interface Location { id: string; name: string; region: string; baseTemp: number; rainBias: number; }
+export interface Location {
+  id: string;
+  name: string;
+  region: string;
+  baseTemp: number;
+  rainBias: number;
+  /** Planting calendar shift in weeks vs. the national reference calendar (+ = later). */
+  shiftWeeks: number;
+  /** Typical dominant soil in the district — used to personalise irrigation guidance. */
+  soil: SoilType;
+}
 
+export type SoilType = "Sandy" | "Loam" | "Clay";
+
+/** All 28 districts of Malawi. */
 export const LOCATIONS: Location[] = [
-  { id: "lilongwe", name: "Lilongwe", region: "Central", baseTemp: 27, rainBias: 0.35 },
-  { id: "blantyre", name: "Blantyre", region: "Southern", baseTemp: 26, rainBias: 0.3 },
-  { id: "mzuzu", name: "Mzuzu", region: "Northern", baseTemp: 23, rainBias: 0.5 },
-  { id: "zomba", name: "Zomba", region: "Southern", baseTemp: 25, rainBias: 0.4 },
-  { id: "kasungu", name: "Kasungu", region: "Central", baseTemp: 26, rainBias: 0.33 },
-  { id: "mangochi", name: "Mangochi", region: "Southern", baseTemp: 30, rainBias: 0.22 },
-  { id: "karonga", name: "Karonga", region: "Northern", baseTemp: 31, rainBias: 0.28 },
-  { id: "salima", name: "Salima", region: "Central", baseTemp: 29, rainBias: 0.3 },
+  // Northern Region
+  { id: "chitipa", name: "Chitipa", region: "Northern", baseTemp: 22, rainBias: 0.5, shiftWeeks: 2, soil: "Loam" },
+  { id: "karonga", name: "Karonga", region: "Northern", baseTemp: 31, rainBias: 0.28, shiftWeeks: -1, soil: "Sandy" },
+  { id: "rumphi", name: "Rumphi", region: "Northern", baseTemp: 23, rainBias: 0.48, shiftWeeks: 2, soil: "Loam" },
+  { id: "mzimba", name: "Mzimba (incl. Mzuzu)", region: "Northern", baseTemp: 23, rainBias: 0.5, shiftWeeks: 2, soil: "Loam" },
+  { id: "nkhatabay", name: "Nkhata Bay", region: "Northern", baseTemp: 27, rainBias: 0.52, shiftWeeks: 0, soil: "Sandy" },
+  { id: "likoma", name: "Likoma", region: "Northern", baseTemp: 28, rainBias: 0.4, shiftWeeks: 0, soil: "Sandy" },
+  // Central Region
+  { id: "kasungu", name: "Kasungu", region: "Central", baseTemp: 26, rainBias: 0.33, shiftWeeks: 1, soil: "Sandy" },
+  { id: "nkhotakota", name: "Nkhotakota", region: "Central", baseTemp: 29, rainBias: 0.42, shiftWeeks: 0, soil: "Sandy" },
+  { id: "ntchisi", name: "Ntchisi", region: "Central", baseTemp: 25, rainBias: 0.38, shiftWeeks: 1, soil: "Loam" },
+  { id: "dowa", name: "Dowa", region: "Central", baseTemp: 24, rainBias: 0.36, shiftWeeks: 1, soil: "Loam" },
+  { id: "salima", name: "Salima", region: "Central", baseTemp: 29, rainBias: 0.3, shiftWeeks: -1, soil: "Sandy" },
+  { id: "lilongwe", name: "Lilongwe", region: "Central", baseTemp: 27, rainBias: 0.35, shiftWeeks: 0, soil: "Loam" },
+  { id: "mchinji", name: "Mchinji", region: "Central", baseTemp: 26, rainBias: 0.36, shiftWeeks: 1, soil: "Loam" },
+  { id: "dedza", name: "Dedza", region: "Central", baseTemp: 22, rainBias: 0.42, shiftWeeks: 2, soil: "Clay" },
+  { id: "ntcheu", name: "Ntcheu", region: "Central", baseTemp: 22, rainBias: 0.4, shiftWeeks: 2, soil: "Clay" },
+  // Southern Region
+  { id: "balaka", name: "Balaka", region: "Southern", baseTemp: 29, rainBias: 0.24, shiftWeeks: -1, soil: "Sandy" },
+  { id: "machinga", name: "Machinga", region: "Southern", baseTemp: 28, rainBias: 0.28, shiftWeeks: -1, soil: "Sandy" },
+  { id: "mangochi", name: "Mangochi", region: "Southern", baseTemp: 30, rainBias: 0.22, shiftWeeks: -2, soil: "Sandy" },
+  { id: "zomba", name: "Zomba", region: "Southern", baseTemp: 25, rainBias: 0.4, shiftWeeks: 0, soil: "Loam" },
+  { id: "chiradzulu", name: "Chiradzulu", region: "Southern", baseTemp: 25, rainBias: 0.38, shiftWeeks: 0, soil: "Clay" },
+  { id: "blantyre", name: "Blantyre", region: "Southern", baseTemp: 26, rainBias: 0.3, shiftWeeks: 0, soil: "Loam" },
+  { id: "mwanza", name: "Mwanza", region: "Southern", baseTemp: 28, rainBias: 0.26, shiftWeeks: -1, soil: "Sandy" },
+  { id: "neno", name: "Neno", region: "Southern", baseTemp: 26, rainBias: 0.3, shiftWeeks: 0, soil: "Loam" },
+  { id: "thyolo", name: "Thyolo", region: "Southern", baseTemp: 24, rainBias: 0.45, shiftWeeks: 0, soil: "Clay" },
+  { id: "mulanje", name: "Mulanje", region: "Southern", baseTemp: 25, rainBias: 0.5, shiftWeeks: 0, soil: "Clay" },
+  { id: "phalombe", name: "Phalombe", region: "Southern", baseTemp: 27, rainBias: 0.34, shiftWeeks: -1, soil: "Loam" },
+  { id: "chikwawa", name: "Chikwawa", region: "Southern", baseTemp: 33, rainBias: 0.2, shiftWeeks: -2, soil: "Clay" },
+  { id: "nsanje", name: "Nsanje", region: "Southern", baseTemp: 34, rainBias: 0.18, shiftWeeks: -2, soil: "Clay" },
 ];
+
+/** Live simulation controls — lets a farmer (or a demo) explore "what if" conditions. */
+export interface SimSettings {
+  enabled: boolean;
+  dayOffset: number;   // shift the date forward/backward in days
+  tempAdjust: number;  // °C added to every forecast day
+  rainAdjust: number;  // percentage points added to rain chance
+}
+
+export const DEFAULT_SIM: SimSettings = { enabled: false, dayOffset: 0, tempAdjust: 0, rainAdjust: 0 };
+
+export function simNow(sim?: SimSettings, base = new Date()) {
+  if (!sim?.enabled || !sim.dayOffset) return base;
+  return new Date(base.getTime() + sim.dayOffset * 86400000);
+}
 
 export type Condition = "Sunny" | "Partly Cloudy" | "Cloudy" | "Light Rain" | "Heavy Rain" | "Thunderstorms";
 
@@ -67,9 +118,10 @@ export function isRainySeason(d = new Date()) {
 }
 
 /** DEMO implementation — replace with a real weather API call. */
-export function getWeather(locationId: string): WeatherData {
+export function getWeather(locationId: string, sim?: SimSettings): WeatherData {
   const loc = LOCATIONS.find((l) => l.id === locationId) ?? LOCATIONS[0];
-  const today = new Date();
+  const active = sim?.enabled ? sim : undefined;
+  const today = simNow(active);
   const key = `${loc.id}-${today.toDateString()}`;
   const rnd = seeded(key);
   const rainy = isRainySeason(today);
@@ -77,14 +129,14 @@ export function getWeather(locationId: string): WeatherData {
 
   const mkDay = (i: number): DayForecast => {
     const r1 = rnd(), r2 = rnd(), r3 = rnd();
-    const rainChance = Math.max(2, Math.min(95, Math.round((loc.rainBias + rainBoost + (r1 - 0.5) * 0.5) * 100)));
+    const rainChance = Math.max(0, Math.min(100, Math.round((loc.rainBias + rainBoost + (r1 - 0.5) * 0.5) * 100) + (active?.rainAdjust ?? 0)));
     let condition: Condition;
     if (rainChance > 75) condition = r2 > 0.6 ? "Thunderstorms" : "Heavy Rain";
     else if (rainChance > 50) condition = "Light Rain";
     else if (rainChance > 32) condition = "Cloudy";
     else if (rainChance > 16) condition = "Partly Cloudy";
     else condition = "Sunny";
-    const tempMax = Math.round(loc.baseTemp + (rainy ? 1 : 2) + (r3 - 0.5) * 6);
+    const tempMax = Math.round(loc.baseTemp + (rainy ? 1 : 2) + (r3 - 0.5) * 6) + (active?.tempAdjust ?? 0);
     const date = new Date(today.getTime() + i * 86400000);
     return {
       date: date.toISOString().slice(0, 10),
@@ -100,7 +152,7 @@ export function getWeather(locationId: string): WeatherData {
 
   const forecast = Array.from({ length: 7 }, (_, i) => mkDay(i));
   const t0 = forecast[0];
-  const rainLast7Days = Math.round((rainy ? 30 : 4) + rnd() * (rainy ? 60 : 12));
+  const rainLast7Days = Math.max(0, Math.round((rainy ? 30 : 4) + rnd() * (rainy ? 60 : 12) + (active?.rainAdjust ?? 0) * 0.5));
 
   return {
     location: loc,
@@ -268,9 +320,18 @@ function inWindow(month: number, start: number, end: number) {
   return start <= end ? month >= start && month <= end : month >= start || month <= end;
 }
 
-export function getCropTimeline(crop: string, now = new Date()) {
+function shiftLabel(month: number, shiftWeeks: number, edge: "start" | "end") {
+  const m = MONTHS[((month % 12) + 12) % 12];
+  if (shiftWeeks >= 2) return `${edge === "start" ? "mid" : "late"} ${m}`;
+  if (shiftWeeks <= -2) return `${edge === "start" ? "early" : "mid"} ${m}`;
+  return m;
+}
+
+export function getCropTimeline(crop: string, now = new Date(), shiftWeeks = 0) {
   const plan = CROP_PLANS[crop] ?? CROP_PLANS.Maize;
-  const m = now.getMonth();
+  // A district that plants later effectively "runs behind" the national calendar.
+  const adjusted = new Date(now.getTime() - shiftWeeks * 7 * 86400000);
+  const m = adjusted.getMonth();
   let currentIdx = plan.stages.findIndex((s) => inWindow(m, s.startMonth, s.endMonth));
   if (currentIdx === -1) {
     // between cycles: the next stage that starts soonest
@@ -280,10 +341,26 @@ export function getCropTimeline(crop: string, now = new Date()) {
   const stages: StageStatus[] = plan.stages.map((s, i) => ({
     ...s,
     status: i < currentIdx ? "done" : i === currentIdx ? "current" : "upcoming",
-    window: `${MONTHS[s.startMonth]} – ${MONTHS[s.endMonth]}`,
+    window: `${shiftLabel(s.startMonth, shiftWeeks, "start")} – ${shiftLabel(s.endMonth, shiftWeeks, "end")}`,
   }));
   const progress = Math.round(((currentIdx + 0.5) / plan.stages.length) * 100);
-  return { plan, stages, current: stages[currentIdx], next: stages[currentIdx + 1], progress };
+  return { plan, stages, current: stages[currentIdx], next: stages[currentIdx + 1], progress, shiftWeeks };
+}
+
+/** Suggested reminder date for a stage in a given district (never in the past). */
+export function stageDueDate(stage: CropStage, shiftWeeks = 0, now = new Date()) {
+  const year = now.getFullYear();
+  let d = new Date(year, stage.startMonth, 1);
+  d = new Date(d.getTime() + shiftWeeks * 7 * 86400000);
+  if (d.getTime() <= now.getTime()) {
+    const next = new Date(year + 1, stage.startMonth, 1);
+    d = new Date(next.getTime() + shiftWeeks * 7 * 86400000);
+  }
+  // if the stage is already running, remind tomorrow instead of next season
+  if (inWindow(now.getMonth(), stage.startMonth, stage.endMonth)) {
+    return new Date(now.getTime() + 86400000);
+  }
+  return d;
 }
 
 /* --------------------------- IRRIGATION ASSISTANT -------------------------- */
@@ -297,6 +374,16 @@ export interface IrrigationResult {
   headline: string;
   tone: "good" | "warn" | "info";
   reasons: string[];
+  plan: {
+    mm: number;
+    litres: number;
+    timesPerWeek: number;
+    bestTime: string;
+    method: IrrigationMethod;
+    soil: SoilType;
+    sizeHa: number;
+    howMuch: string;
+  };
 }
 
 export function estimateMoisture(w: WeatherData): Moisture {
@@ -306,11 +393,30 @@ export function estimateMoisture(w: WeatherData): Moisture {
   return "Low";
 }
 
-export function getIrrigationAdvice(w: WeatherData, crop: string, moistureOverride?: Moisture): IrrigationResult {
+export type IrrigationMethod = "Watering cans" | "Treadle pump" | "Motor pump / hose" | "Drip kit" | "Rain-fed only";
+
+export interface IrrigationProfile {
+  soil?: SoilType;
+  method?: IrrigationMethod;
+  fieldSizeHa?: number;
+}
+
+/** Litres per hectare per mm of water applied. */
+const MM_TO_LITRES_PER_HA = 10000;
+
+export function getIrrigationAdvice(
+  w: WeatherData,
+  crop: string,
+  moistureOverride?: Moisture,
+  profile: IrrigationProfile = {},
+): IrrigationResult {
   const plan = CROP_PLANS[crop] ?? CROP_PLANS.Maize;
   const moisture = moistureOverride ?? estimateMoisture(w);
   const rainSoon = Math.max(w.current.rainChance, w.forecast[1]?.rainChance ?? 0);
   const temp = w.current.temp;
+  const soil = profile.soil ?? w.location.soil;
+  const method = profile.method ?? "Watering cans";
+  const sizeHa = profile.fieldSizeHa && profile.fieldSizeHa > 0 ? profile.fieldSizeHa : 0.4;
 
   let score = 0;
   const reasons: string[] = [];
@@ -329,10 +435,38 @@ export function getIrrigationAdvice(w: WeatherData, crop: string, moistureOverri
   if (plan.waterNeed >= 1.3) { score += 1; reasons.push(`${plan.crop} is a thirsty crop and needs steady watering.`); }
   else if (plan.waterNeed < 0.9) { score -= 1; reasons.push(`${plan.crop} tolerates drier conditions than most crops.`); }
 
+  if (soil === "Sandy") { score += 1; reasons.push("Sandy soil drains fast — it needs smaller amounts of water, more often."); }
+  else if (soil === "Clay") { score -= 1; reasons.push("Clay soil holds water longer — avoid over-watering or the roots will suffocate."); }
+  else reasons.push("Loam soil holds moisture well — water deeply but less often.");
+
+  if (method === "Rain-fed only") reasons.push("You depend on rainfall, so focus on mulching and ridging to keep the water you already have.");
+  else if (method === "Drip kit") reasons.push("With a drip kit you can apply water slowly and lose very little to evaporation.");
+
   let headline: string, action: string, tone: IrrigationResult["tone"];
   if (score >= 4) { headline = "💧 Irrigation recommended today"; action = "Water in the early morning or late afternoon to reduce evaporation."; tone = "warn"; }
   else if (score >= 2) { headline = "🌤️ Light irrigation may help"; action = "Check the soil at about 10cm depth. If it is dry in your hand, apply a light watering."; tone = "info"; }
   else { headline = "✅ Irrigation may not be necessary today"; action = "Soil moisture and expected rain look sufficient. Check again tomorrow."; tone = "good"; }
 
-  return { moisture, score, action, headline, tone, reasons };
+  // Personalised water plan
+  const baseMm = score >= 4 ? 20 : score >= 2 ? 10 : 0;
+  const soilFactor = soil === "Sandy" ? 0.8 : soil === "Clay" ? 1.2 : 1;
+  const mm = Math.round(baseMm * plan.waterNeed * soilFactor);
+  const litres = Math.round(mm * MM_TO_LITRES_PER_HA * sizeHa);
+  const cansPerRound = Math.round(litres / 20);
+  const timesPerWeek = mm === 0 ? 0 : soil === "Sandy" ? 3 : soil === "Clay" ? 1 : 2;
+  const bestTime = temp >= 30 ? "05:00 – 07:00 or after 16:30" : "early morning";
+  const plans: Record<IrrigationMethod, string> = {
+    "Watering cans": `About ${cansPerRound.toLocaleString()} cans (20L) per round on ${sizeHa} ha.`,
+    "Treadle pump": `About ${Math.max(1, Math.round(litres / 3000))} hour(s) of pumping per round.`,
+    "Motor pump / hose": `About ${Math.max(1, Math.round(litres / 12000))} hour(s) of pumping per round.`,
+    "Drip kit": `Run the drip lines about ${Math.max(1, Math.round(litres / 4000))} hour(s) per round.`,
+    "Rain-fed only": "No irrigation equipment — mulch heavily and make box ridges to trap the rain.",
+  };
+
+  return {
+    moisture, score, action, headline, tone, reasons,
+    plan: mm === 0
+      ? { mm, litres: 0, timesPerWeek: 0, bestTime, method, soil, sizeHa, howMuch: "Hold off watering for now and re-check tomorrow." }
+      : { mm, litres, timesPerWeek, bestTime, method, soil, sizeHa, howMuch: plans[method] },
+  };
 }
