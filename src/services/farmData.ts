@@ -8,18 +8,69 @@
 
 export const IS_DEMO_DATA = true;
 
-export interface Location { id: string; name: string; region: string; baseTemp: number; rainBias: number; }
+export interface Location {
+  id: string;
+  name: string;
+  region: string;
+  baseTemp: number;
+  rainBias: number;
+  /** Planting calendar shift in weeks vs. the national reference calendar (+ = later). */
+  shiftWeeks: number;
+  /** Typical dominant soil in the district — used to personalise irrigation guidance. */
+  soil: SoilType;
+}
 
+export type SoilType = "Sandy" | "Loam" | "Clay";
+
+/** All 28 districts of Malawi. */
 export const LOCATIONS: Location[] = [
-  { id: "lilongwe", name: "Lilongwe", region: "Central", baseTemp: 27, rainBias: 0.35 },
-  { id: "blantyre", name: "Blantyre", region: "Southern", baseTemp: 26, rainBias: 0.3 },
-  { id: "mzuzu", name: "Mzuzu", region: "Northern", baseTemp: 23, rainBias: 0.5 },
-  { id: "zomba", name: "Zomba", region: "Southern", baseTemp: 25, rainBias: 0.4 },
-  { id: "kasungu", name: "Kasungu", region: "Central", baseTemp: 26, rainBias: 0.33 },
-  { id: "mangochi", name: "Mangochi", region: "Southern", baseTemp: 30, rainBias: 0.22 },
-  { id: "karonga", name: "Karonga", region: "Northern", baseTemp: 31, rainBias: 0.28 },
-  { id: "salima", name: "Salima", region: "Central", baseTemp: 29, rainBias: 0.3 },
+  // Northern Region
+  { id: "chitipa", name: "Chitipa", region: "Northern", baseTemp: 22, rainBias: 0.5, shiftWeeks: 2, soil: "Loam" },
+  { id: "karonga", name: "Karonga", region: "Northern", baseTemp: 31, rainBias: 0.28, shiftWeeks: -1, soil: "Sandy" },
+  { id: "rumphi", name: "Rumphi", region: "Northern", baseTemp: 23, rainBias: 0.48, shiftWeeks: 2, soil: "Loam" },
+  { id: "mzimba", name: "Mzimba (incl. Mzuzu)", region: "Northern", baseTemp: 23, rainBias: 0.5, shiftWeeks: 2, soil: "Loam" },
+  { id: "nkhatabay", name: "Nkhata Bay", region: "Northern", baseTemp: 27, rainBias: 0.52, shiftWeeks: 0, soil: "Sandy" },
+  { id: "likoma", name: "Likoma", region: "Northern", baseTemp: 28, rainBias: 0.4, shiftWeeks: 0, soil: "Sandy" },
+  // Central Region
+  { id: "kasungu", name: "Kasungu", region: "Central", baseTemp: 26, rainBias: 0.33, shiftWeeks: 1, soil: "Sandy" },
+  { id: "nkhotakota", name: "Nkhotakota", region: "Central", baseTemp: 29, rainBias: 0.42, shiftWeeks: 0, soil: "Sandy" },
+  { id: "ntchisi", name: "Ntchisi", region: "Central", baseTemp: 25, rainBias: 0.38, shiftWeeks: 1, soil: "Loam" },
+  { id: "dowa", name: "Dowa", region: "Central", baseTemp: 24, rainBias: 0.36, shiftWeeks: 1, soil: "Loam" },
+  { id: "salima", name: "Salima", region: "Central", baseTemp: 29, rainBias: 0.3, shiftWeeks: -1, soil: "Sandy" },
+  { id: "lilongwe", name: "Lilongwe", region: "Central", baseTemp: 27, rainBias: 0.35, shiftWeeks: 0, soil: "Loam" },
+  { id: "mchinji", name: "Mchinji", region: "Central", baseTemp: 26, rainBias: 0.36, shiftWeeks: 1, soil: "Loam" },
+  { id: "dedza", name: "Dedza", region: "Central", baseTemp: 22, rainBias: 0.42, shiftWeeks: 2, soil: "Clay" },
+  { id: "ntcheu", name: "Ntcheu", region: "Central", baseTemp: 22, rainBias: 0.4, shiftWeeks: 2, soil: "Clay" },
+  // Southern Region
+  { id: "balaka", name: "Balaka", region: "Southern", baseTemp: 29, rainBias: 0.24, shiftWeeks: -1, soil: "Sandy" },
+  { id: "machinga", name: "Machinga", region: "Southern", baseTemp: 28, rainBias: 0.28, shiftWeeks: -1, soil: "Sandy" },
+  { id: "mangochi", name: "Mangochi", region: "Southern", baseTemp: 30, rainBias: 0.22, shiftWeeks: -2, soil: "Sandy" },
+  { id: "zomba", name: "Zomba", region: "Southern", baseTemp: 25, rainBias: 0.4, shiftWeeks: 0, soil: "Loam" },
+  { id: "chiradzulu", name: "Chiradzulu", region: "Southern", baseTemp: 25, rainBias: 0.38, shiftWeeks: 0, soil: "Clay" },
+  { id: "blantyre", name: "Blantyre", region: "Southern", baseTemp: 26, rainBias: 0.3, shiftWeeks: 0, soil: "Loam" },
+  { id: "mwanza", name: "Mwanza", region: "Southern", baseTemp: 28, rainBias: 0.26, shiftWeeks: -1, soil: "Sandy" },
+  { id: "neno", name: "Neno", region: "Southern", baseTemp: 26, rainBias: 0.3, shiftWeeks: 0, soil: "Loam" },
+  { id: "thyolo", name: "Thyolo", region: "Southern", baseTemp: 24, rainBias: 0.45, shiftWeeks: 0, soil: "Clay" },
+  { id: "mulanje", name: "Mulanje", region: "Southern", baseTemp: 25, rainBias: 0.5, shiftWeeks: 0, soil: "Clay" },
+  { id: "phalombe", name: "Phalombe", region: "Southern", baseTemp: 27, rainBias: 0.34, shiftWeeks: -1, soil: "Loam" },
+  { id: "chikwawa", name: "Chikwawa", region: "Southern", baseTemp: 33, rainBias: 0.2, shiftWeeks: -2, soil: "Clay" },
+  { id: "nsanje", name: "Nsanje", region: "Southern", baseTemp: 34, rainBias: 0.18, shiftWeeks: -2, soil: "Clay" },
 ];
+
+/** Live simulation controls — lets a farmer (or a demo) explore "what if" conditions. */
+export interface SimSettings {
+  enabled: boolean;
+  dayOffset: number;   // shift the date forward/backward in days
+  tempAdjust: number;  // °C added to every forecast day
+  rainAdjust: number;  // percentage points added to rain chance
+}
+
+export const DEFAULT_SIM: SimSettings = { enabled: false, dayOffset: 0, tempAdjust: 0, rainAdjust: 0 };
+
+export function simNow(sim?: SimSettings, base = new Date()) {
+  if (!sim?.enabled || !sim.dayOffset) return base;
+  return new Date(base.getTime() + sim.dayOffset * 86400000);
+}
 
 export type Condition = "Sunny" | "Partly Cloudy" | "Cloudy" | "Light Rain" | "Heavy Rain" | "Thunderstorms";
 
@@ -67,9 +118,10 @@ export function isRainySeason(d = new Date()) {
 }
 
 /** DEMO implementation — replace with a real weather API call. */
-export function getWeather(locationId: string): WeatherData {
+export function getWeather(locationId: string, sim?: SimSettings): WeatherData {
   const loc = LOCATIONS.find((l) => l.id === locationId) ?? LOCATIONS[0];
-  const today = new Date();
+  const active = sim?.enabled ? sim : undefined;
+  const today = simNow(active);
   const key = `${loc.id}-${today.toDateString()}`;
   const rnd = seeded(key);
   const rainy = isRainySeason(today);
@@ -77,14 +129,14 @@ export function getWeather(locationId: string): WeatherData {
 
   const mkDay = (i: number): DayForecast => {
     const r1 = rnd(), r2 = rnd(), r3 = rnd();
-    const rainChance = Math.max(2, Math.min(95, Math.round((loc.rainBias + rainBoost + (r1 - 0.5) * 0.5) * 100)));
+    const rainChance = Math.max(0, Math.min(100, Math.round((loc.rainBias + rainBoost + (r1 - 0.5) * 0.5) * 100) + (active?.rainAdjust ?? 0)));
     let condition: Condition;
     if (rainChance > 75) condition = r2 > 0.6 ? "Thunderstorms" : "Heavy Rain";
     else if (rainChance > 50) condition = "Light Rain";
     else if (rainChance > 32) condition = "Cloudy";
     else if (rainChance > 16) condition = "Partly Cloudy";
     else condition = "Sunny";
-    const tempMax = Math.round(loc.baseTemp + (rainy ? 1 : 2) + (r3 - 0.5) * 6);
+    const tempMax = Math.round(loc.baseTemp + (rainy ? 1 : 2) + (r3 - 0.5) * 6) + (active?.tempAdjust ?? 0);
     const date = new Date(today.getTime() + i * 86400000);
     return {
       date: date.toISOString().slice(0, 10),
@@ -100,7 +152,7 @@ export function getWeather(locationId: string): WeatherData {
 
   const forecast = Array.from({ length: 7 }, (_, i) => mkDay(i));
   const t0 = forecast[0];
-  const rainLast7Days = Math.round((rainy ? 30 : 4) + rnd() * (rainy ? 60 : 12));
+  const rainLast7Days = Math.max(0, Math.round((rainy ? 30 : 4) + rnd() * (rainy ? 60 : 12) + (active?.rainAdjust ?? 0) * 0.5));
 
   return {
     location: loc,
