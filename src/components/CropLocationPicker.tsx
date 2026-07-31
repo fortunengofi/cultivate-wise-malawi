@@ -1,6 +1,8 @@
 import { CROPS, LOCATIONS, CROP_PLANS } from "@/services/farmData";
 import { useFarm } from "@/contexts/FarmContext";
 
+const REGIONS = ["Northern", "Central", "Southern"] as const;
+
 const CropLocationPicker = ({ showCrop = true, showLocation = true }: { showCrop?: boolean; showLocation?: boolean }) => {
   const { crop, setCrop, locationId, setLocationId } = useFarm();
   return (
@@ -21,14 +23,18 @@ const CropLocationPicker = ({ showCrop = true, showLocation = true }: { showCrop
       )}
       {showLocation && (
         <label className="block">
-          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Location</span>
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">District</span>
           <select
             value={locationId}
             onChange={(e) => setLocationId(e.target.value)}
             className="mt-1 w-full h-11 rounded-lg border border-border bg-card px-3 text-base font-semibold text-foreground"
           >
-            {LOCATIONS.map((l) => (
-              <option key={l.id} value={l.id}>{`${l.name} (${l.region})`}</option>
+            {REGIONS.map((region) => (
+              <optgroup key={region} label={`${region} Region`}>
+                {LOCATIONS.filter((l) => l.region === region).map((l) => (
+                  <option key={l.id} value={l.id}>{l.name}</option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </label>
