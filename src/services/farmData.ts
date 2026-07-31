@@ -358,6 +358,16 @@ export interface IrrigationResult {
   headline: string;
   tone: "good" | "warn" | "info";
   reasons: string[];
+  plan: {
+    mm: number;
+    litres: number;
+    timesPerWeek: number;
+    bestTime: string;
+    method: IrrigationMethod;
+    soil: SoilType;
+    sizeHa: number;
+    howMuch: string;
+  };
 }
 
 export function estimateMoisture(w: WeatherData): Moisture {
