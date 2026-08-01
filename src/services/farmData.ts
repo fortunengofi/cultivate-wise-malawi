@@ -226,6 +226,7 @@ export function getMarketPrices(crop: string): CropPrices {
 }
 
 export function bestMarket(p: CropPrices): MarketQuote {
+  if (!p.quotes.length) return { market: "No records yet", price: 0, trend: "flat", changePct: 0 };
   return p.quotes.reduce((a, b) => (b.price > a.price ? b : a));
 }
 
