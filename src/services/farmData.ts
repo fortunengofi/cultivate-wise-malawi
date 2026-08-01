@@ -197,8 +197,7 @@ export function getFarmAlerts(w: WeatherData): FarmAlert[] {
 export interface MarketQuote { market: string; price: number; trend: "up" | "down" | "flat"; changePct: number; }
 export interface CropPrices { crop: string; emoji: string; unit: string; quotes: MarketQuote[]; history: number[]; }
 
-const MARKETS = ["Lilongwe", "Blantyre", "Mzuzu", "Zomba", "Mangochi"];
-
+/** Crops supported by the app, with the unit prices are normally quoted in. */
 const BASE_PRICES: Record<string, { emoji: string; base: number; unit: string }> = {
   Maize: { emoji: "🌽", base: 900, unit: "kg" },
   Rice: { emoji: "🍚", base: 2200, unit: "kg" },
