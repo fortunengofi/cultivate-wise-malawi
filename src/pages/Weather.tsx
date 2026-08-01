@@ -18,7 +18,7 @@ const toneClass = {
 } as const;
 
 const Weather = () => {
-  const { weather, alerts } = useFarm();
+  const { weather, alerts, weatherLoading } = useFarm();
   const { current, forecast, location } = weather;
 
   return (
@@ -34,7 +34,13 @@ const Weather = () => {
         <section className="bg-card rounded-xl p-5 shadow-card border border-border">
           <div className="flex items-center justify-between">
             <p className="font-bold text-foreground">{location.name} <span className="text-muted-foreground font-medium text-sm">• {location.region} Region</span></p>
-            <DemoBadge />
+            {weatherLoading ? (
+              <DemoBadge label="Updating…" />
+            ) : weather.source === "live" ? (
+              <DemoBadge label="Live • Open-Meteo" />
+            ) : (
+              <DemoBadge label="Offline estimate" />
+            )}
           </div>
           <div className="flex items-center gap-4 mt-3">
             <div className="text-5xl">{conditionIcon(current.condition)}</div>
