@@ -14,7 +14,15 @@ const Index = () => {
     { to: "/weather", emoji: "🌦️", title: t("navWeather"), line1: `${weather.current.temp}°C | ${weather.current.condition}`, line2: `Rain probability: ${weather.current.rainChance}%` },
     { to: "/calendar", emoji: "🌱", title: "Today's Farm Task", line1: `${timeline.current.name} — ${crop}`, line2: `Due now • ${timeline.current.window}` },
     { to: "/irrigation", emoji: "💧", title: t("navIrrigation"), line1: `${irrigation.moisture} soil moisture`, line2: irrigation.headline.replace(/^[^\w]+/, "") },
-    { to: "/prices", emoji: "📈", title: "Market", line1: `${crop} — best price`, line2: `MWK ${best.price.toLocaleString()}/${prices.unit} • ${best.market}` },
+    {
+      to: "/prices",
+      emoji: "📈",
+      title: "Market",
+      line1: prices.quotes.length ? `${crop} — best recorded price` : `${crop} — no records yet`,
+      line2: prices.quotes.length
+        ? `MWK ${best.price.toLocaleString()}/${prices.unit} • ${best.market}`
+        : "Tap to see products with current prices",
+    },
   ];
   const quickActions = [
     { to: "/soil", icon: Leaf, label: t("soilAI"), description: t("soilAIDesc"), color: "gradient-earth" },

@@ -1,12 +1,12 @@
 /**
  * Farm Link data service layer.
  * -----------------------------------------------------------------
- * DEMO DATA: everything below is realistic Malawi-focused sample data.
- * Swap the `getWeather` / `getMarketPrices` implementations for real API
- * calls later — the returned shapes are what the UI depends on.
+ * Live weather comes from Open-Meteo (see weatherApi.ts) and market prices
+ * come from recorded market surveys in the backend (see marketApi.ts).
+ * `getWeather` below is only the OFFLINE FALLBACK used when the weather API
+ * cannot be reached, so the app stays usable without a network connection.
+ * Agronomic content (crop stages, advice, water needs) is reference guidance.
  */
-
-export const IS_DEMO_DATA = true;
 
 export interface Location {
   id: string;
@@ -117,7 +117,7 @@ export function isRainySeason(d = new Date()) {
   return m >= 10 || m <= 3;
 }
 
-/** DEMO implementation — replace with a real weather API call. */
+/** Offline fallback estimate — used only when the live weather API is unreachable. */
 export function getWeather(locationId: string, sim?: SimSettings): WeatherData {
   const loc = LOCATIONS.find((l) => l.id === locationId) ?? LOCATIONS[0];
   const active = sim?.enabled ? sim : undefined;
@@ -197,8 +197,7 @@ export function getFarmAlerts(w: WeatherData): FarmAlert[] {
 export interface MarketQuote { market: string; price: number; trend: "up" | "down" | "flat"; changePct: number; }
 export interface CropPrices { crop: string; emoji: string; unit: string; quotes: MarketQuote[]; history: number[]; }
 
-const MARKETS = ["Lilongwe", "Blantyre", "Mzuzu", "Zomba", "Mangochi"];
-
+/** Crops supported by the app, with the unit prices are normally quoted in. */
 const BASE_PRICES: Record<string, { emoji: string; base: number; unit: string }> = {
   Maize: { emoji: "🌽", base: 900, unit: "kg" },
   Rice: { emoji: "🍚", base: 2200, unit: "kg" },
@@ -211,26 +210,9 @@ const BASE_PRICES: Record<string, { emoji: string; base: number; unit: string }>
 
 export const CROPS = Object.keys(BASE_PRICES);
 
-/** DEMO implementation — replace with a real market-price API/feed. */
-export function getMarketPrices(crop: string): CropPrices {
-  const meta = BASE_PRICES[crop] ?? BASE_PRICES.Maize;
-  const rnd = seeded(`${crop}-${new Date().toDateString()}`);
-  const quotes: MarketQuote[] = MARKETS.map((market) => {
-    const delta = (rnd() - 0.45) * 0.18;
-    const price = Math.round((meta.base * (1 + delta)) / 10) * 10;
-    const changePct = Math.round((rnd() - 0.4) * 120) / 10;
-    return { market, price, trend: changePct > 0.5 ? "up" : changePct < -0.5 ? "down" : "flat", changePct };
-  });
-  const history = Array.from({ length: 6 }, (_, i) => Math.round((meta.base * (0.88 + rnd() * 0.22) * (1 + i * 0.012)) / 10) * 10);
-  return { crop, emoji: meta.emoji, unit: meta.unit, quotes, history };
-}
-
 export function bestMarket(p: CropPrices): MarketQuote {
+  if (!p.quotes.length) return { market: "No records yet", price: 0, trend: "flat", changePct: 0 };
   return p.quotes.reduce((a, b) => (b.price > a.price ? b : a));
-}
-
-export function getAllBestPrices() {
-  return CROPS.map((c) => { const p = getMarketPrices(c); return { crop: c, emoji: p.emoji, unit: p.unit, best: bestMarket(p) }; });
 }
 
 /* ----------------------------- CROP CALENDAR ----------------------------- */

@@ -19,7 +19,8 @@ const Step = ({ n, title, to, cta, children }: { n: number; title: string; to: s
 
 const FarmPlan = () => {
   const { crop, weather, timeline, irrigation, prices, best } = useFarm();
-  const lowest = Math.min(...prices.quotes.map((q) => q.price));
+  const hasPrices = prices.quotes.length > 0;
+  const lowest = hasPrices ? Math.min(...prices.quotes.map((q) => q.price)) : 0;
   const exampleYield = 1000; // kg — illustrative
   const grossBest = best.price * exampleYield;
 
@@ -54,13 +55,26 @@ const FarmPlan = () => {
         </Step>
 
         <Step n={4} title="Market Prices" to="/prices" cta="Compare all markets">
-          Best market for {crop}: <strong className="text-foreground">{best.market} — MWK {best.price.toLocaleString()}/{prices.unit}</strong>.
-          Lowest quoted market is MWK {lowest.toLocaleString()}/{prices.unit}.
+          {hasPrices ? (
+            <>
+              Best recorded market for {crop}: <strong className="text-foreground">{best.market} — MWK {best.price.toLocaleString()}/{prices.unit}</strong>.
+              {prices.quotes.length > 1 ? <> Lowest recorded market is MWK {lowest.toLocaleString()}/{prices.unit}.</> : null}
+            </>
+          ) : (
+            <>No market price records for {crop} yet — open Market Prices to see the products that have current records.</>
+          )}
         </Step>
 
         <Step n={5} title="Profit Insights" to="/insights" cta="Open profit calculator">
-          Example: selling {exampleYield.toLocaleString()}kg at the best market would bring about{" "}
-          <strong className="text-foreground">MWK {grossBest.toLocaleString()}</strong> before costs. Use the calculator with your own inputs and transport costs.
+          {hasPrices ? (
+            <>
+              Example: selling {exampleYield.toLocaleString()}kg at the best recorded market would bring about{" "}
+              <strong className="text-foreground">MWK {grossBest.toLocaleString()}</strong> before costs.
+            </>
+          ) : (
+            <>Enter your own expected revenue and costs in the calculator to see your profit and margin.</>
+          )}{" "}
+          Use the calculator with your own inputs and transport costs.
         </Step>
 
         <Step n={6} title="Marketplace" to="/market" cta={`List ${crop} for sale`}>

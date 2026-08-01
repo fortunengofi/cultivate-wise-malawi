@@ -13,6 +13,7 @@ interface MarketPrice {
   min_price: number;
   max_price: number;
   market: string;
+  updated_at: string;
 }
 
 const seasons = [
@@ -47,7 +48,7 @@ const Insights = () => {
         {/* Market prices */}
         <section>
           <h2 className="text-lg font-bold font-serif text-foreground mb-3 flex items-center gap-2">
-            <TrendingUp size={20} className="text-primary" /> Today's Market Prices
+            <TrendingUp size={20} className="text-primary" /> Recorded Market Prices
           </h2>
           {loading ? (
             <div className="flex justify-center py-6"><Loader2 className="animate-spin text-primary" /></div>
@@ -66,7 +67,9 @@ const Insights = () => {
                       <p className="font-bold text-foreground">{p.product}</p>
                       <p className="text-xs text-muted-foreground">{p.market} • per {p.unit}</p>
                     </div>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">Live</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                      {new Date(p.updated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                    </span>
                   </div>
                   <p className="text-lg font-bold text-secondary mt-2">
                     MK {p.min_price.toLocaleString()} – {p.max_price.toLocaleString()}
