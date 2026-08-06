@@ -82,7 +82,7 @@ const ScanHistory = () => {
             </ul>
           ) : (
             <p className="text-xs text-muted-foreground mt-1">
-              No alerts — {Math.round(weather.current.tempC)}°C in {weather.location.name}.
+              No alerts — {Math.round(weather.current.temp)}°C in {weather.location.name}.
             </p>
           )}
         </div>
