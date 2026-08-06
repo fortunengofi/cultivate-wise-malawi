@@ -1,11 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Leaf, Cpu, Building2, BookOpen, ShoppingCart } from "lucide-react";
+import { Home, Leaf, ScanLine, Building2, BookOpen, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/soil", icon: Leaf, label: "Soil AI" },
-  { to: "/agritech", icon: Cpu, label: "AgriTech" },
+  { to: "/live", icon: ScanLine, label: "Live AI" },
   { to: "/services", icon: Building2, label: "Services" },
   { to: "/records", icon: BookOpen, label: "Records" },
   { to: "/market", icon: ShoppingCart, label: "Market" },
