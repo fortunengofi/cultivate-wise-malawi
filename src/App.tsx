@@ -18,6 +18,8 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Insights from "./pages/Insights";
+import LiveScan from "./pages/LiveScan";
+import ScanHistory from "./pages/ScanHistory";
 import Weather from "./pages/Weather";
 import MarketPrices from "./pages/MarketPrices";
 import CropCalendar from "./pages/CropCalendar";
@@ -42,6 +44,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/soil" element={<SoilAnalyzer />} />
+              <Route path="/live" element={<LiveScan />} />
+              <Route path="/history" element={<ScanHistory />} />
               <Route path="/agritech" element={<AgriTech />} />
               <Route path="/services" element={<Services />} />
               <Route path="/market" element={<Marketplace />} />

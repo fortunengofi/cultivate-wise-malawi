@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Leaf, Bug, Stethoscope, Camera, Upload, Loader2, Sprout, Droplets, ThermometerSun, Mountain, X, CheckCircle, AlertTriangle, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Leaf, Bug, Stethoscope, Camera, Upload, Loader2, Sprout, Droplets, ThermometerSun, Mountain, X, CheckCircle, AlertTriangle, BookOpen, ScanLine, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -344,6 +345,18 @@ const FarmAnalyzer = () => {
     <div className="flex flex-col max-w-3xl mx-auto pb-8">
       <PageHeader title="AI Farm Analyzer" subtitle="Soil, pests, and animal health — with step-by-step tutorials" />
       <div className="px-4 sm:px-0 mt-4">
+        <Link to="/live" className="block mb-4">
+          <div className="rounded-2xl gradient-earth p-4 shadow-elevated flex items-center gap-3">
+            <div className="rounded-xl bg-white/20 p-2.5 backdrop-blur-md">
+              <ScanLine size={22} className="text-primary-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-primary-foreground">Live AI Scan — new</p>
+              <p className="text-[11px] text-primary-foreground/80">Open your camera and talk to the AI while it watches your soil, crops, pests or animals.</p>
+            </div>
+            <ChevronRight size={18} className="text-primary-foreground" />
+          </div>
+        </Link>
         <Tabs defaultValue="soil" className="w-full">
           <TabsList className="grid grid-cols-3 w-full">
             <TabsTrigger value="soil" className="gap-1.5"><Leaf size={14} /> Soil</TabsTrigger>
