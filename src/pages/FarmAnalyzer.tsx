@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Leaf, Bug, Stethoscope, Camera, Upload, Loader2, Sprout, Droplets, ThermometerSun, Mountain, X, CheckCircle, AlertTriangle, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Leaf, Bug, Stethoscope, Camera, Upload, Loader2, Sprout, Droplets, ThermometerSun, Mountain, X, CheckCircle, AlertTriangle, BookOpen, ScanLine, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
