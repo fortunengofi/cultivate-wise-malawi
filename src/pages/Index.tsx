@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, CloudRain, TrendingUp, MessageCircle, Compass, ArrowRight } from "lucide-react";
+import { Leaf, Cpu, Building2, BookOpen, ShoppingCart, CloudRain, TrendingUp, MessageCircle, Compass, ArrowRight, ScanLine } from "lucide-react";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFarm } from "@/contexts/FarmContext";
@@ -25,6 +25,7 @@ const Index = () => {
     },
   ];
   const quickActions = [
+    { to: "/live", icon: ScanLine, label: "Live AI Scan", description: "Point your camera, talk to the AI", color: "gradient-earth" },
     { to: "/soil", icon: Leaf, label: t("soilAI"), description: t("soilAIDesc"), color: "gradient-earth" },
     { to: "/insights", icon: TrendingUp, label: t("profitInsights"), description: t("profitInsightsDesc"), color: "gradient-harvest" },
     { to: "/market", icon: ShoppingCart, label: t("navMarket"), description: t("marketDesc"), color: "gradient-earth" },
