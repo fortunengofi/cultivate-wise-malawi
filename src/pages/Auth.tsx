@@ -17,46 +17,6 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [phone, setPhone] = useState("+265");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-
-  const normalizePhone = (v: string) => {
-    let p = v.replace(/[^\d+]/g, "");
-    if (!p.startsWith("+")) p = "+" + p.replace(/^0+/, "265");
-    return p;
-  };
-
-  const sendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: normalizePhone(phone),
-      options: { data: { display_name: displayName } },
-    });
-    setLoading(false);
-    if (error) toast.error(error.message);
-    else {
-      setOtpSent(true);
-      toast.success("Code sent by SMS. Enter the 6 digits below.");
-    }
-  };
-
-  const verifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({
-      phone: normalizePhone(phone),
-      token: otp.trim(),
-      type: "sms",
-    });
-    setLoading(false);
-    if (error) toast.error(error.message.includes("expired") ? "Code expired — request a new one." : "Wrong code. Try again.");
-    else {
-      toast.success("Phone verified. Welcome!");
-      navigate("/");
-    }
-  };
 
   useEffect(() => {
     if (!authLoading && user) navigate("/");
