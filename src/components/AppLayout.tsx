@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import TopNav from "./TopNav";
 import Footer from "./Footer";
+import InstallPrompt from "./InstallPrompt";
 
 interface AppLayoutProps {
   children: ReactNode;
