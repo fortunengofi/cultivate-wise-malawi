@@ -71,10 +71,9 @@ const Auth = () => {
 
         <div className="bg-card rounded-2xl p-6 shadow-card border border-border">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-5">
+            <TabsList className="grid w-full grid-cols-2 mb-5">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              <TabsTrigger value="phone">Phone</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
