@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Leaf, Mail, Lock, User as UserIcon, Loader2, Phone as PhoneIcon, ShieldCheck } from "lucide-react";
+import { Leaf, Mail, Lock, User as UserIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
