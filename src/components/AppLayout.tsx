@@ -15,6 +15,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         {children}
       </main>
       <Footer />
+      <InstallPrompt />
     </div>
   );
 };
