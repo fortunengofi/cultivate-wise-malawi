@@ -128,48 +128,10 @@ const Auth = () => {
               </form>
             </TabsContent>
 
-            <TabsContent value="phone">
-              {!otpSent ? (
-                <form onSubmit={sendOtp} className="space-y-3">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone-name">Full name (optional)</Label>
-                    <div className="relative">
-                      <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input id="phone-name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="pl-9" placeholder="James Banda" />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone-number">Phone number</Label>
-                    <div className="relative">
-                      <PhoneIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input id="phone-number" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} className="pl-9" placeholder="+265 999 123 456" />
-                    </div>
-                    <p className="text-[11px] text-muted-foreground">We send a 6-digit code by SMS. Standard rates may apply.</p>
-                  </div>
-                  <Button type="submit" disabled={loading} className="w-full gradient-earth text-primary-foreground border-0 font-bold">
-                    {loading ? <Loader2 className="animate-spin" size={16} /> : "Send code"}
-                  </Button>
-                </form>
-              ) : (
-                <form onSubmit={verifyOtp} className="space-y-3">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="phone-otp">Verification code</Label>
-                    <div className="relative">
-                      <ShieldCheck size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input id="phone-otp" inputMode="numeric" maxLength={6} required value={otp} onChange={(e) => setOtp(e.target.value)} className="pl-9 tracking-[0.4em]" placeholder="123456" />
-                    </div>
-                    <p className="text-[11px] text-muted-foreground">Sent to {normalizePhone(phone)}</p>
-                  </div>
-                  <Button type="submit" disabled={loading} className="w-full gradient-harvest text-accent-foreground border-0 font-bold">
-                    {loading ? <Loader2 className="animate-spin" size={16} /> : "Verify & continue"}
-                  </Button>
-                  <Button type="button" variant="ghost" className="w-full text-xs" onClick={() => { setOtpSent(false); setOtp(""); }}>
-                    Change number / resend code
-                  </Button>
-                </form>
-              )}
-            </TabsContent>
           </Tabs>
+          <p className="text-[11px] text-muted-foreground mt-4 text-center">
+            We verify accounts by email — check your inbox after signing up.
+          </p>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
